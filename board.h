@@ -3,5 +3,7 @@
 #define MAX_NUM_PIECES 32
 
 typedef struct board_t {
-    piece_type pieces[MAX_NUM_PIECES];
-} board;
+    PieceType pieces[MAX_NUM_PIECES];
+} Board;
+
+Board init_board();
