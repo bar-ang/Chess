@@ -11,6 +11,7 @@ typedef int color;
 #define COLOR_BG_MAGENTA 45
 #define COLOR_BG_GRAY 100
 #define COLOR_BG_BLACK 40
+#define COLOR_BG_YELLOW 43
 
 #define PRINTCOLOR(fg, bg) printf("\033[1;%d;%dm", (fg), (bg))
 #define RESETCOLOR PRINTCOLOR(NO_COLOR, NO_COLOR)
@@ -45,12 +46,26 @@ void print_board(Board board) {
     bool found;
     char str[60];
     color bgcolor;
+    Cell selected[NUM_CELLS];
+    int num_moves = 0;
+    if (board.selected_piece >= 0) {
+        num_moves = move_map(selected, board.pieces[board.selected_piece]);
+    }
     for (int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {
             bgcolor = ((i+j) % 2) ? COLOR_BG_GRAY : COLOR_BG_BLACK;
+            if (board.selected_piece >= 0) {
+                auto p = board.pieces[board.selected_piece];
+                if (p.loc.row == i && p.loc.col == j)
+                    bgcolor = COLOR_BG_CYAN;
+                for(int k = 0; k < num_moves; k++) {
+                    if (selected[k].row == i && selected[k].col == j)
+                        bgcolor = COLOR_BG_YELLOW;
+                }
+            }
             found = false;
             for (Piece *p = board.pieces; p < board.pieces + board.num_pieces; p++) {
-                if (p->row == i && p->col == j) {
+                if (p->loc.row == i && p->loc.col == j) {
                     if (!found) {
                         found = sign(str, p->type);
                         PRINTCOLOR(p->player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
