@@ -7,6 +7,7 @@
 typedef struct board_t {
     Piece pieces[MAX_NUM_PIECES];
     int num_pieces;
+    int selected_piece;
 } Board;
 
 Board init_board();
