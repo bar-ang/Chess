@@ -10,3 +10,4 @@ typedef struct board_t {
 } Board;
 
 Board init_board();
+Board scrambled_board();

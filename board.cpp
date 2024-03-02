@@ -38,3 +38,8 @@ Board init_board() {
     
     return board;
 }
+
+Board scrambled_board() {
+    Board board;
+    return board;
+}
