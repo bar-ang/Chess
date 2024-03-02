@@ -1,8 +1,6 @@
 #include "pieces.h"
 
 #define MAX_NUM_PIECES 32
-#define NUM_ROWS 8
-#define NUM_COLS 8
 
 typedef struct board_t {
     Piece pieces[MAX_NUM_PIECES];
@@ -12,3 +10,5 @@ typedef struct board_t {
 
 Board init_board();
 Board scrambled_board();
+int get_piece(Board, int, int);
+int possible_moves(Cell *, Board, int);
