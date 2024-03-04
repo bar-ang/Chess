@@ -17,3 +17,5 @@ int possible_moves(Cell *, Board, int);
 Board move(Board, Piece, Cell);
 bool allowed_to_move(Board, Piece, Cell);
 Player checkmate(Board);
+Board random_move_for_piece(Board, int);
+Board random_move(Board, Player);

@@ -1,3 +1,6 @@
+#include <time.h>
+#include <stdlib.h>
+#include <string.h>
 #include "board.h"
 
 Board move_hypothetical(Board, int, Cell);
@@ -185,5 +188,25 @@ Board move(Board board, int piece, Cell cell) {
     board.check = search_for_check(board);
     if (board.check != PLAYER_NONE)
         board.checkmate = is_in_checkmate(board, piece) ? board.check : PLAYER_NONE;
+    return board;
+}
+
+Board random_move_for_piece(Board board, int piece) {
+    Cell moves[NUM_CELLS];
+    int num_moves = possible_moves(moves, board, piece);
+    if (!num_moves) return board;
+    int ind = rand() % num_moves;
+    return move(board, piece, moves[ind]);
+}
+
+Board random_move(Board board, Player player) {
+    auto original = board;
+    int piece;
+    while (memcmp(&original, &board, sizeof(board)) == 0) {
+        do {
+            piece = rand() % board.num_pieces;
+        } while (board.pieces[piece].player != player);
+        board = random_move_for_piece(board, piece);
+    }
     return board;
 }
