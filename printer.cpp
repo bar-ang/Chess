@@ -49,7 +49,7 @@ void print_board(Board board) {
     Cell selected[NUM_CELLS];
     int num_moves = 0;
     if (board.selected_piece >= 0) {
-        num_moves = move_map(selected, board.pieces[board.selected_piece]);
+        num_moves = possible_moves(selected, board, board.selected_piece);
     }
     for (int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {

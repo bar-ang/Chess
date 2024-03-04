@@ -105,3 +105,80 @@ int possible_moves(Cell *moves, Board board, int piece) {
 
     return count;
 }
+
+int threatened_pieces(int *threatened, Board board, int piece) {
+    int count = 0;
+    Cell moves[MAX_NUM_PIECES];
+    int num_moves = possible_moves(moves, board, piece);
+    for (int i = 0; i < num_moves; i++) {
+        int j = get_piece(board, moves[i].row, moves[i].col);
+        if (j < 0) continue;
+        auto p = board.pieces[j];
+        if (p.player != board.pieces[piece].player)
+            threatened[count++] = j;
+    }
+
+    return count;
+}
+
+bool allowed_to_move(Board board, int piece, Cell cell) {
+    return path_is_accessible(board, board.pieces[piece], cell.row, cell.col);
+}
+
+Board remove_eaten_piece_if_needed(Board board, int piece, Cell cell) {
+    for (int i=0; i < board.num_pieces; i++) {
+        auto p = board.pieces + i;
+        if (i != piece && p->loc.row == cell.row && p->loc.col == cell.col) {
+            p->type = PIECE_NONE;
+        }
+    }
+
+    return board;
+}
+
+Player checkmate(Board board) {
+    return board.checkmate;
+}
+
+bool is_in_checkmate(Board board, int piece) {
+    Cell moves[8];
+    int num_moves = possible_moves(moves, board, piece);
+    for (int i = 0; i < num_moves; i++) {
+        auto b = move_hypothetical(board, piece, moves[i]);
+        if (search_for_check(b) != board.pieces[piece].player)
+            return false;
+    }
+
+    return true;
+}
+
+Player search_for_check(Board board) {
+    for (int i = 0; i < board.num_pieces; i++) {
+        int threatened[MAX_NUM_PIECES];
+        int num_threatened = threatened_pieces(threatened, board, i);
+        for (int j = 0; j < num_threatened; j++) {
+            auto p = board.pieces[threatened[j]];
+            if (p.type == PIECE_KING) {
+                return p.player;
+            }
+        }
+    }
+
+    return PLAYER_NONE;
+}
+
+Board move_hypothetical(Board board, int piece, Cell cell) {
+    auto p = board.pieces + piece;
+    p->loc = cell;
+    board = remove_eaten_piece_if_needed(board, piece, cell);
+
+    return board;
+}
+
+Board move(Board board, int piece, Cell cell) {
+    board = move_hypothetical(board, piece, cell);
+    board.check = search_for_check(board);
+    if (board.check != PLAYER_NONE)
+        board.checkmate = is_in_checkmate(board, piece) ? board.check : PLAYER_NONE;
+    return board;
+}
