@@ -1,5 +1,8 @@
 #include "board.h"
 
+Board move_hypothetical(Board, int, Cell);
+Player search_for_check(Board);
+
 Board set_piece(Board board, PieceType type, Player player, int row, int col) {
     board.pieces[board.num_pieces].type = type;
     board.pieces[board.num_pieces].player = player;
@@ -13,6 +16,8 @@ Board init_board() {
     Board board;
     board.num_pieces = 0;
     board.selected_piece = -1;
+    board.check = PLAYER_NONE;
+    board.checkmate = PLAYER_NONE;
 
     board = set_piece(board, PIECE_ROOK, PLAYER_WHITE, 0, 0);
     board = set_piece(board, PIECE_KNIGHT, PLAYER_WHITE, 0, 1);
