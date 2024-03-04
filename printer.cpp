@@ -84,3 +84,10 @@ void print_board(Board board) {
         printf("\n");
     }
 }
+
+void print_board_code(Board board) {
+    for (int i = 0; i < sizeof(board); i++) {
+        printf("%02x", ((char *)&board)[i]);
+    }
+    printf("\n");
+}
