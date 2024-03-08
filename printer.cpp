@@ -79,7 +79,7 @@ void print_board(Board board) {
     color bgcolor;
     for (int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {
-            bgcolor = ((i+j) % 2) ? WHITE_TILE_BGCOLOR : BLACK_TILE_COLOR;
+            bgcolor = ((i+j) % 2) ? WHITE_TILE_BGCOLOR : BLACK_TILE_BGCOLOR;
             auto pid = BOARD(board, i, j);
             if (pid == NO_PIECE) {
                 PRINTCOLOR(NO_COLOR, bgcolor); 
