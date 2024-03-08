@@ -15,6 +15,23 @@ bool select_update(Selection *sel, Board *board, Square c, Piece piece) {
     return false;
 }
 
+bool is_move_possible(Selection select, int row, int col) {
+    for (int i = 0; i < select.num_possible_moves; i++)
+        if (select.possible_moves[i].row == row && select.possible_moves[i].col == col)
+            return true;
+    return false;
+}
+
+Board move_selected_piece(Selection select, int row, int col) {
+    Board board = *select.board;
+    BOARD(board, row, col) = BOARD(board, select.pos.row, select.pos.col);
+    return board;
+}
+
+void delete_possible_moves_due_to_check(Selection *select) {
+    return;
+}
+
 Selection select_tile(Board *board, int row, int col) {
     Selection sel;
     
@@ -95,18 +112,23 @@ Selection select_tile(Board *board, int row, int col) {
             }
 
             auto pid = BOARD(*board, row + dir, col + 1);
-            if (pid != NO_PIECE && board->pieces[pid].player != piece.player)
+            if (pid != NO_PIECE && board->pieces[pid].player != piece.player) {
+                sel.possible_moves[sel.num_possible_moves++] = {.row = row + dir, .col = col + 1};
                 sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
+            }
 
             pid = BOARD(*board, row + dir, col - 1);
-            if (pid != NO_PIECE && board->pieces[pid].player != piece.player)
+            if (pid != NO_PIECE && board->pieces[pid].player != piece.player) {
+                sel.possible_moves[sel.num_possible_moves++] = {.row = row + dir, .col = col - 1};
                 sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
-
+            }
             break;
         }
         default:
             return select_none;
     }
+
+    delete_possible_moves_due_to_check(&sel);
     
     return sel;
 }
