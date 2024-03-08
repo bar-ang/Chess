@@ -17,7 +17,9 @@ typedef struct board_t {
     Square selected_square;
 } Board;
 
+Board init_empty_board();
 Board init_board();
+Board set_piece(Board, pid, PieceType, Player, int, int);
 Board scrambled_board();
 int get_piece(Board, int, int);
 int possible_moves(Square *, Board, int);

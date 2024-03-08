@@ -12,13 +12,18 @@ Board set_piece(Board board, pid p_id, PieceType type, Player player, int row, i
     return board;
 }
 
-Board init_board() {
+Board init_empty_board() {
     Board board;
     board.selected_square = {-1, -1};
-    int i = 0;
 
     for (int i = 0; i<NUM_SQUARES; i++)
         board.board[i] = NO_PIECE;
+    return board;
+}
+
+Board init_board() {
+    Board board = init_empty_board();
+    int i = 0;
     
     board = set_piece(board, i++, PIECE_ROOK, PLAYER_WHITE, 0, 0);
     board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_WHITE, 0, 1);
