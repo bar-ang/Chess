@@ -42,42 +42,86 @@ bool sign(char *str, PieceType type) {
     return true;
 }
 
-void print_board(Board board) {
-    bool found;
+void print_selection(Selection select) {
+    Board *board = select.board;
     char str[60];
     color bgcolor;
-    Cell selected[NUM_CELLS];
-    int num_moves = 0;
-    if (board.selected_piece >= 0) {
-        num_moves = possible_moves(selected, board, board.selected_piece);
-    }
     for (int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {
             bgcolor = ((i+j) % 2) ? COLOR_BG_GRAY : COLOR_BG_BLACK;
-            if (board.selected_piece >= 0) {
-                auto p = board.pieces[board.selected_piece];
-                if (p.loc.row == i && p.loc.col == j)
-                    bgcolor = COLOR_BG_CYAN;
-                for(int k = 0; k < num_moves; k++) {
-                    if (selected[k].row == i && selected[k].col == j)
-                        bgcolor = COLOR_BG_YELLOW;
-                }
+            auto pid = BOARD(*board, i, j);
+            if (pid == NO_PIECE) {
+                PRINTCOLOR(NO_COLOR, bgcolor); 
+                sprintf(str, "%c", EMPTY);
+            } else {
+                auto piece = board->pieces[pid];
+                sign(str, piece.type);
+                PRINTCOLOR(piece.player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
             }
-            found = false;
-            for (Piece *p = board.pieces; p < board.pieces + board.num_pieces; p++) {
-                if (p->loc.row == i && p->loc.col == j) {
-                    if (!found) {
-                        found = sign(str, p->type);
-                        PRINTCOLOR(p->player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
-                        break;
+            printf(" %s ", str);
+            RESETCOLOR;
+        }
+        printf("\n");
+    }
+    /*
+        bool found;
+        char str[60];
+        color bgcolor;
+        Selection select;
+        int num_moves = 0;
+        if (board.selected_piece >= 0) {
+            num_moves = possible_moves(selected, board, board.selected_piece);
+        }
+        for (int i = 0; i < NUM_ROWS; i++) {
+            for (int j = 0; j < NUM_COLS; j++) {
+                bgcolor = ((i+j) % 2) ? COLOR_BG_GRAY : COLOR_BG_BLACK;
+                if (board.selected_piece >= 0) {
+                    auto p = board.pieces[board.selected_piece];
+                    if (p.loc.row == i && p.loc.col == j)
+                        bgcolor = COLOR_BG_CYAN;
+                    for(int k = 0; k < num_moves; k++) {
+                        if (selected[k].row == i && selected[k].col == j)
+                            bgcolor = COLOR_BG_YELLOW;
                     }
                 }
-            }
-            if (!found) {
-                sprintf(str, "%c", EMPTY);
-                PRINTCOLOR(0, bgcolor);
-            }
+                found = false;
+                for (Piece *p = board.pieces; p < board.pieces + board.num_pieces; p++) {
+                    if (p->loc.row == i && p->loc.col == j) {
+                        if (!found) {
+                            found = sign(str, p->type);
+                            PRINTCOLOR(p->player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    sprintf(str, "%c", EMPTY);
+                    PRINTCOLOR(0, bgcolor);
+                }
 
+                printf(" %s ", str);
+                RESETCOLOR;
+            }
+            printf("\n");
+        }
+*/
+}
+
+void print_board(Board board) {
+    char str[10];
+    color bgcolor;
+    for (int i = 0; i < NUM_ROWS; i++) {
+        for (int j = 0; j < NUM_COLS; j++) {
+            bgcolor = ((i+j) % 2) ? COLOR_BG_GRAY : COLOR_BG_BLACK;
+            auto pid = BOARD(board, i, j);
+            if (pid == NO_PIECE) {
+                PRINTCOLOR(NO_COLOR, bgcolor); 
+                sprintf(str, "%c", EMPTY);
+            } else {
+                auto piece = board.pieces[pid];
+                sign(str, piece.type);
+                PRINTCOLOR(piece.player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
+            }
             printf(" %s ", str);
             RESETCOLOR;
         }

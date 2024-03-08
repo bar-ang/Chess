@@ -9,6 +9,11 @@ int main() {
     srand(time(NULL));
 
     Board board = init_board();
+    print_board(board);
+    printf("\n");
+    printf("\n");
+    print_selection({.board = &board});
+    /*
     int turn = 0;
 
     print_board(board);
@@ -34,7 +39,7 @@ int main() {
     }
 
     printf("game ended after %d turns.\n", turn);
-    //print_board_code(board);
+    */
     
     return 0;
 }
