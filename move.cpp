@@ -15,7 +15,7 @@ bool select_update(Selection *sel, Board *board, Square c, Piece piece) {
     return false;
 }
 
-Selection select(Board *board, int row, int col) {
+Selection select_tile(Board *board, int row, int col) {
     Selection sel;
     
     sel.board = board;
@@ -69,11 +69,12 @@ Selection select(Board *board, int row, int col) {
                     if (piece.type == PIECE_ROOK && !(i == 0 || j == 0)) continue;
                     
                     for (int v = 1; v < NUM_ROWS; v++) {
-                        Square sq = {.row = row + i * v, .col = col + i * v};
-                        if (select_update(&sel, board, sq, piece))
+                        Square sq = {.row = row + i * v, .col = col + j * v};
+                        if (!IN_BOUNDS(sq) || select_update(&sel, board, sq, piece))
                             break;
                     }
                 }
+            break;
         }
         case PIECE_PAWN: {
             int dir = (piece.player == PLAYER_WHITE) ? 1 : -1;
@@ -84,13 +85,24 @@ Selection select(Board *board, int row, int col) {
                     sel.possible_moves[sel.num_possible_moves++] = c;
             }
 
+            if ((piece.player == PLAYER_WHITE && row == 1) || (piece.player == PLAYER_BLACK && row == 6)) {
+                c = {.row = row + 2*dir, .col = col};
+                if (IN_BOUNDS(c)) {
+                    auto pid = BOARD2(*board, c);
+                    if (pid == NO_PIECE)
+                        sel.possible_moves[sel.num_possible_moves++] = c;
+                }
+            }
+
             auto pid = BOARD(*board, row + dir, col + 1);
-            if (pid != NO_PIECE || board->pieces[pid].player != piece.player)
+            if (pid != NO_PIECE && board->pieces[pid].player != piece.player)
                 sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
 
             pid = BOARD(*board, row + dir, col - 1);
-            if (pid != NO_PIECE || board->pieces[pid].player != piece.player)
+            if (pid != NO_PIECE && board->pieces[pid].player != piece.player)
                 sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
+
+            break;
         }
         default:
             return select_none;

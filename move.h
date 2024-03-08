@@ -12,4 +12,4 @@ typedef struct selection_t {
 
 const Selection select_none = { .board = NULL };
 
-Selection select(Board *, int, int);
+Selection select_tile(Board *, int, int);
