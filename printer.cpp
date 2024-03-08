@@ -30,48 +30,39 @@ bool sign(char *str, PieceType type) {
 }
 
 void print_selection(Selection select) {
-    /*
-        bool found;
-        char str[60];
-        color bgcolor;
-        Selection select;
-        int num_moves = 0;
-        if (board.selected_piece >= 0) {
-            num_moves = possible_moves(selected, board, board.selected_piece);
-        }
-        for (int i = 0; i < NUM_ROWS; i++) {
-            for (int j = 0; j < NUM_COLS; j++) {
-                bgcolor = ((i+j) % 2) ? COLOR_BG_GRAY : COLOR_BG_BLACK;
-                if (board.selected_piece >= 0) {
-                    auto p = board.pieces[board.selected_piece];
-                    if (p.loc.row == i && p.loc.col == j)
-                        bgcolor = COLOR_BG_CYAN;
-                    for(int k = 0; k < num_moves; k++) {
-                        if (selected[k].row == i && selected[k].col == j)
-                            bgcolor = COLOR_BG_YELLOW;
-                    }
-                }
-                found = false;
-                for (Piece *p = board.pieces; p < board.pieces + board.num_pieces; p++) {
-                    if (p->loc.row == i && p->loc.col == j) {
-                        if (!found) {
-                            found = sign(str, p->type);
-                            PRINTCOLOR(p->player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
-                            break;
-                        }
-                    }
-                }
-                if (!found) {
-                    sprintf(str, "%c", EMPTY);
-                    PRINTCOLOR(0, bgcolor);
-                }
+    if (!select.board) {
+        printf(">>> NO BOARD <<<\n");
+        return;
+    }
+    char str[10];
+    color bgcolor;
+    for (int i = 0; i < NUM_ROWS; i++) {
+        for (int j = 0; j < NUM_COLS; j++) {
+            bgcolor = ((i+j) % 2) ? WHITE_TILE_BGCOLOR : BLACK_TILE_BGCOLOR;
+            
+            if (select.pos.row == i && select.pos.col == j)
+                bgcolor = SELECTED_PIECE_BGCOLOR;
+            for (int k = 0; k < select.num_possible_moves; k++)
+                if (select.possible_moves[k].row == i && select.possible_moves[k].col == j)
+                    bgcolor = POSSIBLE_MOVE_BGCOLOR;
+            for (int k = 0; k < select.num_threatened_pieces; k++)
+                if (select.threatened_pieces[k] == BOARD(*select.board, i, j))
+                    bgcolor = THREATENED_PIECES_BGCOLOR;
 
-                printf(" %s ", str);
-                RESETCOLOR;
+            auto pid = BOARD(*select.board, i, j);
+            if (pid == NO_PIECE) {
+                PRINTCOLOR(NO_COLOR, bgcolor); 
+                sprintf(str, "%c", EMPTY);
+            } else {
+                auto piece = select.board->pieces[pid];
+                sign(str, piece.type);
+                PRINTCOLOR(piece.player == PLAYER_WHITE ? WHITE_PLAYER_COLOR : BLACK_PLAYER_COLOR, bgcolor);
             }
-            printf("\n");
+            printf(" %s ", str);
+            RESETCOLOR;
         }
-*/
+        printf("\n");
+    }
 }
 
 void print_board(Board board) {
