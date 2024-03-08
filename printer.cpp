@@ -3,19 +3,6 @@
 
 typedef int color;
 
-#define NO_COLOR 0
-#define COLOR_RED 91
-#define COLOR_YELLOW 92
-#define COLOR_BLUE 94
-#define COLOR_BG_CYAN 46
-#define COLOR_BG_MAGENTA 45
-#define COLOR_BG_GRAY 100
-#define COLOR_BG_BLACK 40
-#define COLOR_BG_YELLOW 43
-
-#define PRINTCOLOR(fg, bg) printf("\033[1;%d;%dm", (fg), (bg))
-#define RESETCOLOR PRINTCOLOR(NO_COLOR, NO_COLOR)
-
 bool sign(char *str, PieceType type) {
     switch (type) {
         case PIECE_KING:
@@ -43,26 +30,6 @@ bool sign(char *str, PieceType type) {
 }
 
 void print_selection(Selection select) {
-    Board *board = select.board;
-    char str[60];
-    color bgcolor;
-    for (int i = 0; i < NUM_ROWS; i++) {
-        for (int j = 0; j < NUM_COLS; j++) {
-            bgcolor = ((i+j) % 2) ? COLOR_BG_GRAY : COLOR_BG_BLACK;
-            auto pid = BOARD(*board, i, j);
-            if (pid == NO_PIECE) {
-                PRINTCOLOR(NO_COLOR, bgcolor); 
-                sprintf(str, "%c", EMPTY);
-            } else {
-                auto piece = board->pieces[pid];
-                sign(str, piece.type);
-                PRINTCOLOR(piece.player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
-            }
-            printf(" %s ", str);
-            RESETCOLOR;
-        }
-        printf("\n");
-    }
     /*
         bool found;
         char str[60];
@@ -112,7 +79,7 @@ void print_board(Board board) {
     color bgcolor;
     for (int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {
-            bgcolor = ((i+j) % 2) ? COLOR_BG_GRAY : COLOR_BG_BLACK;
+            bgcolor = ((i+j) % 2) ? WHITE_TILE_BGCOLOR : BLACK_TILE_COLOR;
             auto pid = BOARD(board, i, j);
             if (pid == NO_PIECE) {
                 PRINTCOLOR(NO_COLOR, bgcolor); 
@@ -120,7 +87,7 @@ void print_board(Board board) {
             } else {
                 auto piece = board.pieces[pid];
                 sign(str, piece.type);
-                PRINTCOLOR(piece.player == PLAYER_WHITE ? COLOR_RED : COLOR_BLUE, bgcolor);
+                PRINTCOLOR(piece.player == PLAYER_WHITE ? WHITE_PLAYER_COLOR : BLACK_PLAYER_COLOR, bgcolor);
             }
             printf(" %s ", str);
             RESETCOLOR;
