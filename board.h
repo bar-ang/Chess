@@ -28,3 +28,4 @@ bool allowed_to_move(Board, Piece, Square);
 Player checkmate(Board *);
 Board random_move_for_piece(Board, int);
 Board random_move(Board, Player);
+Square find_king(Board *, Player);

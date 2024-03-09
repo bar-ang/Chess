@@ -51,6 +51,16 @@ Board init_board() {
     return board;
 }
 
+Square find_king(Board *board, Player player) {
+    for (int i = 0; i < NUM_ROWS; i++)
+        for (int j = 0; j < NUM_COLS; j++) {
+            auto pid = BOARD(*board, i, j);
+            if (pid != NO_PIECE && board->pieces[pid].type == PIECE_KING && board->pieces[pid].player == player)
+                return {.row = i, .col = j};
+        }
+    return NO_SQUARE;
+}
+
 Player checkmate(Board *board) {
     return PLAYER_NONE;
 }
