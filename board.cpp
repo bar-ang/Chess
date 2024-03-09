@@ -51,7 +51,7 @@ Board init_board() {
     return board;
 }
 
-Player checkmate(Board board) {
+Player checkmate(Board *board) {
     return PLAYER_NONE;
 }
 

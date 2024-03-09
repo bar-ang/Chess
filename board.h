@@ -25,6 +25,6 @@ int get_piece(Board, int, int);
 int possible_moves(Square *, Board, int);
 Board move(Board, Piece, Square);
 bool allowed_to_move(Board, Piece, Square);
-Player checkmate(Board);
+Player checkmate(Board *);
 Board random_move_for_piece(Board, int);
 Board random_move(Board, Player);
