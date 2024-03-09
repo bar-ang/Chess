@@ -3,6 +3,8 @@
 #define NUM_SQUARES (NUM_ROWS * NUM_COLS)
 
 #define IN_BOUNDS(c) ((c).row >= 0 && (c).row < NUM_ROWS && (c).col >= 0 && (c).col < NUM_COLS)
+#define OPPONENT_OF(p) ((p) == PLAYER_WHITE ? PLAYER_BLACK : PLAYER_WHITE)
+
 #define NO_SQUARE { .row = -1, .col = -1 }
 
 typedef enum player_enum {
