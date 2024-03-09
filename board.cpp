@@ -14,7 +14,6 @@ Board set_piece(Board board, pid p_id, PieceType type, Player player, int row, i
 
 Board init_empty_board() {
     Board board;
-    board.selected_square = NO_SQUARE;
 
     for (int i = 0; i<NUM_SQUARES; i++)
         board.board[i] = NO_PIECE;

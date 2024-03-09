@@ -14,7 +14,6 @@ typedef int pid;
 typedef struct board_t {
     pid board[NUM_ROWS*NUM_COLS];
     Piece pieces[NUM_PIECES];
-    Square selected_square;
 } Board;
 
 Board init_empty_board();
