@@ -9,11 +9,11 @@ int main() {
     srand(time(NULL));
 
     Board board = init_empty_board();
-    board = set_piece(board, 0, PIECE_PAWN, PLAYER_BLACK, 6, 3);
+    board = set_piece(board, 0, PIECE_ROOK, PLAYER_WHITE, 6, 2);
     board = set_piece(board, 1, PIECE_KING, PLAYER_BLACK, 2, 2);
-    board = set_piece(board, 2, PIECE_QUEEN, PLAYER_BLACK, 2, 4);
+    board = set_piece(board, 2, PIECE_BISHOP, PLAYER_BLACK, 2, 4);
     //board = set_piece(board, 1, PIECE_KING, PLAYER_BLACK, 6, 3);
-    auto sel = select_tile(&board, 6, 3);
+    auto sel = select_tile(&board, 2, 2);
     print_board(board);
     printf("\n");
     printf("\n");
