@@ -8,6 +8,7 @@ Player search_for_check(Board);
 Board set_piece(Board board, pid p_id, PieceType type, Player player, int row, int col) {
     board.pieces[p_id].type = type;
     board.pieces[p_id].player = player;
+    board.num_times_piece_has_moved[p_id] = 0;
     BOARD(board, row, col) = p_id;
     return board;
 }

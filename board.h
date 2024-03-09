@@ -14,6 +14,7 @@ typedef int pid;
 typedef struct board_t {
     pid board[NUM_ROWS*NUM_COLS];
     Piece pieces[NUM_PIECES];
+    int num_times_piece_has_moved[NUM_PIECES];
 } Board;
 
 Board init_empty_board();

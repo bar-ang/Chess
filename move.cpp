@@ -33,9 +33,10 @@ Board move_selected_piece(Selection *select, int row, int col) {
     BOARD(board, row, col) = BOARD2(board, select->pos);
     BOARD2(board, select->pos) = NO_PIECE;
 
+    auto pid = BOARD(board, row, col);
+    board.num_times_piece_has_moved[pid]++;
     // pawn promotion
     if (row == 0 || row == 7) {
-        auto pid = BOARD(board, row, col);
         if (board.pieces[pid].type == PIECE_PAWN)
             board.pieces[pid].type = PIECE_QUEEN;
     }
