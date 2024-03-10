@@ -1,50 +1,50 @@
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
-#include "printer.h"
+#include "ui.h"
 
 #define MAX_NUM_TURNS 1000
 
 int main() {
     srand(time(NULL));
 
-    Board board = init_empty_board();
-    board = set_piece(board, 0, PIECE_ROOK, PLAYER_WHITE, 6, 2);
-    board = set_piece(board, 1, PIECE_KING, PLAYER_BLACK, 2, 2);
-    board = set_piece(board, 2, PIECE_BISHOP, PLAYER_BLACK, 2, 4);
-    //board = set_piece(board, 1, PIECE_KING, PLAYER_BLACK, 6, 3);
-    auto sel = select_tile(&board, 2, 2);
-    print_board(board);
-    printf("\n");
-    printf("\n");
-    print_selection(sel);
-    /*
-    int turn = 0;
-
-    print_board(board);
-    for (turn = 0; checkmate(board) == PLAYER_NONE && turn < MAX_NUM_TURNS; turn++)
-        board = random_move(board, turn % 2 == 0 ? PLAYER_WHITE : PLAYER_BLACK);
-
-    printf("\n");
-    print_board(board);
-
-    switch(checkmate(board)) {
-        case PLAYER_BLACK: {
-            printf("WHITE wins!\n");
+    auto board = init_board();
+    Tile inp;
+    Selection select;
+    while (checkmate(&board) == PLAYER_NONE) {
+        print_board(board);
+        printf("Choose a piece to move: ");
+        while(true) {
+            inp = user_input();
+            if (inp.row == -1) {
+                printf("Invalid input.\n");
+                continue;
+            }
+            select = select_tile(&board, inp.row, inp.col);
+            if (!select.board) {
+                printf("Cannot choose that.\n");
+                continue;
+            }
             break;
         }
-        case PLAYER_WHITE: {
-            printf("BLACK wins!\n");
-            break;
-        }
-        default: {
-            printf("Reached %d turns with no winner.\n", turn);
+        print_selection(select);
+        printf("Where to move the piece? ");
+        while(true) {
+            inp = user_input();
+            if (inp.row == -1) {
+                printf("Invalid input.\n");
+                continue;
+            }
+            
+            if (!is_move_possible(select, inp.row, inp.col)) {
+                printf("cannot move there.\n");
+                continue;
+            }
+            
+            board = move_selected_piece(&select, inp.row, inp.col);
             break;
         }
     }
-
-    printf("game ended after %d turns.\n", turn);
-    */
     
     return 0;
 }
