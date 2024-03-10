@@ -61,10 +61,6 @@ Square find_king(Board *board, Player player) {
     return NO_SQUARE;
 }
 
-Player checkmate(Board *board) {
-    return PLAYER_NONE;
-}
-
 Board random_move_for_piece(Board board, int piece) {
     return board;
 }

@@ -72,6 +72,39 @@ int checking_pieces(pid *checking, Board *board, Player player) {
     return count;
 }
 
+// *** assumes the player is in check, otherwise the function behaves badly! **
+// 'resolvers' is an array of pieces that can get king out of check.
+// the return value is the number of resolvers.
+// if is_in_checkmate(...) == 0 then it is checkmate.
+int is_in_checkmate(Board *board, Player player, pid *resolvers) {
+    int count = 0;
+    for (int i = 0; i < NUM_ROWS; i++)
+        for (int j = 0; j < NUM_COLS; j++) {
+            auto pid = BOARD(*board, i, j);
+            if (pid == NO_PIECE)
+                continue;
+            if (board->pieces[pid].player == player) {
+                auto select = select_tile(board, i, j);
+                if (select.num_possible_moves > 0) {
+                    if (resolvers != NULL)
+                        resolvers[count++] = pid;
+                    else
+                        count++;
+                }
+            }
+        }
+    return count;
+}
+
+Player checkmate(Board *board) {
+    if (checking_pieces(NULL, board, PLAYER_WHITE) > 0 && is_in_checkmate(board, PLAYER_WHITE, NULL) == 0)
+        return PLAYER_WHITE;
+    else if (checking_pieces(NULL, board, PLAYER_BLACK) > 0 && is_in_checkmate(board, PLAYER_BLACK, NULL) == 0)
+        return PLAYER_BLACK;
+    else
+        return PLAYER_NONE;
+}
+
 void delete_possible_moves_due_to_check(Selection *select) {
     auto player = get_selected_piece(select).player;
 
