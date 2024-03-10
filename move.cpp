@@ -4,7 +4,7 @@
 
 Selection select_tile_ignore_check(Board *board, int row, int col);
 
-bool select_update(Selection *sel, Board *board, Square c, Piece piece) {
+bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
     auto pid = BOARD2(*board, c);
     if (pid == NO_PIECE)
         sel->possible_moves[sel->num_possible_moves++] = c;
@@ -114,7 +114,7 @@ void delete_possible_moves_due_to_check(Selection *select) {
     for (int i = 0; i < select->num_possible_moves; i++) {
         Board hypo_board = move_selected_piece(select, select->possible_moves[i].row, select->possible_moves[i].col);
         if (checking_pieces(NULL, &hypo_board, player) > 0) {
-            select->possible_moves[i] = NO_SQUARE;
+            select->possible_moves[i] = NO_TILE;
         }
     }
 
@@ -138,7 +138,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
             for (int i = -1; i <= 1; i++)
                 for (int j = -1; j <= 1; j++) {
                     if (i == 0 && j == 0) continue;
-                    Square c = {.row = row + i, .col = col + j};
+                    Tile c = {.row = row + i, .col = col + j};
                     if (!IN_BOUNDS(c))
                         continue;
                     select_update(&sel, board, c, piece);
@@ -146,7 +146,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
             break;
         }
         case PIECE_KNIGHT: {
-            Square map[8] = {
+            Tile map[8] = {
                 {.row = row + 1, .col = col + 2},
                 {.row = row - 1, .col = col + 2},
                 {.row = row + 1, .col = col - 2},
@@ -173,7 +173,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
                     if (piece.type == PIECE_ROOK && !(i == 0 || j == 0)) continue;
 
                     for (int v = 1; v < NUM_ROWS; v++) {
-                        Square sq = {.row = row + i * v, .col = col + j * v};
+                        Tile sq = {.row = row + i * v, .col = col + j * v};
                         if (!IN_BOUNDS(sq) || select_update(&sel, board, sq, piece))
                             break;
                     }
@@ -182,7 +182,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
         }
         case PIECE_PAWN: {
             int dir = (piece.player == PLAYER_WHITE) ? 1 : -1;
-            Square c = {.row = row + dir, .col = col};
+            Tile c = {.row = row + dir, .col = col};
             if (IN_BOUNDS(c)) {
                 auto pid = BOARD2(*board, c);
                 if (pid == NO_PIECE)

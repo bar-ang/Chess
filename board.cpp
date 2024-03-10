@@ -16,7 +16,7 @@ Board set_piece(Board board, pid p_id, PieceType type, Player player, int row, i
 Board init_empty_board() {
     Board board;
 
-    for (int i = 0; i<NUM_SQUARES; i++)
+    for (int i = 0; i<NUM_TILES; i++)
         board.board[i] = NO_PIECE;
     return board;
 }
@@ -51,14 +51,14 @@ Board init_board() {
     return board;
 }
 
-Square find_king(Board *board, Player player) {
+Tile find_king(Board *board, Player player) {
     for (int i = 0; i < NUM_ROWS; i++)
         for (int j = 0; j < NUM_COLS; j++) {
             auto pid = BOARD(*board, i, j);
             if (pid != NO_PIECE && board->pieces[pid].type == PIECE_KING && board->pieces[pid].player == player)
                 return {.row = i, .col = j};
         }
-    return NO_SQUARE;
+    return NO_TILE;
 }
 
 Board random_move_for_piece(Board board, int piece) {
