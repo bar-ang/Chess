@@ -67,7 +67,6 @@ int checking_pieces(pid *checking, Board *board, Player player) {
         for (int j = 0; j < NUM_COLS; j++) {
             auto pid = BOARD(*board, i, j);
             if (pid != NO_PIECE && board->pieces[pid].player == OPPONENT_OF(player)) {
-                printf("[%d %d %d]\n", i ,j, board == NULL);
                 auto select = select_tile_ignore_check(board, i, j);
                 for (int t = 0; t < select.num_threatened_pieces; t++) {
                     if (board->pieces[select.threatened_pieces[t]].type == PIECE_KING) {
