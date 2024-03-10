@@ -36,10 +36,22 @@ void print_selection(Selection select) {
     }
     char str[10];
     color bgcolor;
+
+    PRINTCOLOR(EDGE_COLOR, EDGE_BGCOLOR);
+    printf("  ");
+    for (int j = 0; j < NUM_COLS; j++) {
+        printf(" %c ", 'A' + j);
+    }
+    printf("  ");
+    RESETCOLOR;
+    printf("\n");
+    
     for (int i = 0; i < NUM_ROWS; i++) {
+        PRINTCOLOR(EDGE_COLOR, EDGE_BGCOLOR);
+        printf("%d ", i+1);
+        RESETCOLOR;
         for (int j = 0; j < NUM_COLS; j++) {
             bgcolor = ((i+j) % 2) ? WHITE_TILE_BGCOLOR : BLACK_TILE_BGCOLOR;
-            
             if (select.pos.row == i && select.pos.col == j)
                 bgcolor = SELECTED_PIECE_BGCOLOR;
             for (int k = 0; k < select.num_possible_moves; k++)
@@ -61,8 +73,20 @@ void print_selection(Selection select) {
             printf(" %s ", str);
             RESETCOLOR;
         }
+        PRINTCOLOR(EDGE_COLOR, EDGE_BGCOLOR);
+        printf("%d ", i+1);
+        RESETCOLOR;
         printf("\n");
     }
+
+    PRINTCOLOR(EDGE_COLOR, EDGE_BGCOLOR);
+    printf("  ");
+    for (int j = 0; j < NUM_COLS; j++) {
+        printf(" %c ", 'A' + j);
+    }
+    printf("  ");
+    RESETCOLOR;
+    printf("\n");
 }
 
 void print_board(Board board) {

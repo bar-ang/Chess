@@ -11,6 +11,11 @@
 #define COLOR_BG_GRAY       100
 #define COLOR_BG_BLACK      40
 #define COLOR_BG_YELLOW     43
+#define COLOR_BG_RED        41
+#define COLOR_WHITE         97
+#define COLOR_BG_WHITE      107
+#define COLOR_BLACK         40
+
 
 #define WHITE_TILE_BGCOLOR         COLOR_BG_GRAY
 #define BLACK_TILE_BGCOLOR         COLOR_BG_BLACK
@@ -19,6 +24,8 @@
 #define SELECTED_PIECE_BGCOLOR     COLOR_BG_YELLOW
 #define POSSIBLE_MOVE_BGCOLOR      COLOR_BG_CYAN
 #define THREATENED_PIECES_BGCOLOR  COLOR_BG_MAGENTA
+#define EDGE_COLOR                 COLOR_BLACK
+#define EDGE_BGCOLOR               COLOR_BG_WHITE
 
 #define PRINTCOLOR(fg, bg) printf("\033[1;%d;%dm", (fg), (bg))
 #define RESETCOLOR PRINTCOLOR(NO_COLOR, NO_COLOR)
