@@ -26,6 +26,16 @@ bool is_move_possible(Selection select, int row, int col) {
     return false;
 }
 
+Selection unselect(Board *board) {
+    Selection sel;
+    sel.board = board;
+    sel.num_possible_moves = 0;
+    sel.num_threatened_pieces = 0;
+    sel.pos = NO_TILE;
+
+    return sel;
+}
+
 Board move_selected_piece(Selection *select, int row, int col) {
     Board board = *select->board;
     if (!PIECE_SELECTED(select))
