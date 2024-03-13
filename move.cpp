@@ -200,7 +200,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
 
             if ((piece.player == PLAYER_WHITE && row == 1) || (piece.player == PLAYER_BLACK && row == 6)) {
                 c = {.row = row + 2*dir, .col = col};
-                if (IN_BOUNDS(c)) {
+                if (IN_BOUNDS(c) && BOARD(*board, row + dir, col) == NO_PIECE) {
                     auto pid = BOARD2(*board, c);
                     if (pid == NO_PIECE)
                         sel.possible_moves[sel.num_possible_moves++] = c;
