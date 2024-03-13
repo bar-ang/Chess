@@ -140,7 +140,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
 
     auto pid = BOARD(*board, row, col);
     if (pid == NO_PIECE)
-        return select_none;
+        return unselect(board);
     auto piece = board->pieces[pid];
     switch (piece.type) {
         case PIECE_KING: {
@@ -221,7 +221,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
             break;
         }
         default:
-            return select_none;
+            return unselect(board);
     }
     return sel;
 
