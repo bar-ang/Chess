@@ -45,10 +45,24 @@ Board move_selected_piece(Selection *select, int row, int col) {
 
     auto pid = BOARD(board, row, col);
     board.num_times_piece_has_moved[pid]++;
+
     // pawn promotion
     if (row == 0 || row == 7) {
         if (board.pieces[pid].type == PIECE_PAWN)
             board.pieces[pid].type = PIECE_QUEEN;
+    }
+
+    // casteling
+    if (board.pieces[pid].type == PIECE_KING) {
+        if (col - select->pos.col == 2) {
+            board.num_times_piece_has_moved[BOARD(board, row, 7)]++;
+            BOARD(board, row, col-1) = BOARD(board, row, 7);
+            BOARD(board, row, 7) = NO_PIECE;
+        } else if (col - select->pos.col == -2) {
+            board.num_times_piece_has_moved[BOARD(board, row, 0)]++;
+            BOARD(board, row, col+1) = BOARD(board, row, 0);
+            BOARD(board, row, 0) = NO_PIECE;
+        }
     }
     
     return board;
@@ -152,6 +166,20 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
                         continue;
                     select_update(&sel, board, c, piece);
                 }
+
+            // Casteling
+            if (board->num_times_piece_has_moved[pid] == 0) {
+                auto rook = BOARD(*board, row, 0);
+                if (rook == PIECE_ROOK && board->pieces[rook].player == piece.player && board->num_times_piece_has_moved[rook] == 0) {
+                    select_update(&sel, board, {.row = row, .col = col - 2}, piece);
+                }
+                
+                rook = BOARD(*board, row, 7);
+                if (rook == PIECE_ROOK && board->pieces[rook].player == piece.player && board->num_times_piece_has_moved[rook] == 0) {
+                    select_update(&sel, board, {.row = row, .col = col + 2}, piece);
+                }
+            }
+            
             break;
         }
         case PIECE_KNIGHT: {
