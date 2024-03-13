@@ -171,15 +171,21 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
             if (board->num_times_piece_has_moved[pid] == 0) {
                 auto rook = BOARD(*board, row, 0);
                 if (rook == PIECE_ROOK && board->pieces[rook].player == piece.player && board->num_times_piece_has_moved[rook] == 0) {
+                    for (int t = 0; t < col; t++)
+                        if (BOARD(*board, row, t) != NO_PIECE)
+                            goto second_rook;
                     select_update(&sel, board, {.row = row, .col = col - 2}, piece);
                 }
-                
+second_rook:                
                 rook = BOARD(*board, row, 7);
                 if (rook == PIECE_ROOK && board->pieces[rook].player == piece.player && board->num_times_piece_has_moved[rook] == 0) {
+                    for (int t = col+1; t < 8; t++)
+                        if (BOARD(*board, row, t) != NO_PIECE)
+                            goto end;
                     select_update(&sel, board, {.row = row, .col = col + 2}, piece);
                 }
             }
-            
+end:            
             break;
         }
         case PIECE_KNIGHT: {
