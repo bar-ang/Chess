@@ -25,6 +25,4 @@ int get_piece(Board, int, int);
 int possible_moves(Tile *, Board, int);
 Board move(Board, Piece, Tile);
 bool allowed_to_move(Board, Piece, Tile);
-Board random_move_for_piece(Board, int);
-Board random_move(Board, Player);
 Tile find_king(Board *, Player);

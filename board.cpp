@@ -60,19 +60,3 @@ Tile find_king(Board *board, Player player) {
         }
     return NO_TILE;
 }
-
-Board random_move_for_piece(Board board, int piece) {
-    return board;
-}
-
-Board random_move(Board board, Player player) {
-    auto original = board;
-    int piece;
-    while (memcmp(&original, &board, sizeof(board)) == 0) {
-        do {
-            piece = rand() % NUM_PIECES;
-        } while (board.pieces[piece].player != player);
-        board = random_move_for_piece(board, piece);
-    }
-    return board;
-}

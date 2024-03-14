@@ -16,4 +16,6 @@ Selection select_tile(Board *, int, int);
 Board move_selected_piece(Selection *, int, int);
 bool is_move_possible(Selection, int, int);
 Player checkmate(Board *);
-Selection unselect(Board *); 
+Selection unselect(Board *);
+Board random_move_for_piece(Board, int);
+Board random_move(Board, Player);
