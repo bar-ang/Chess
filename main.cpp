@@ -23,7 +23,7 @@ Board play_turn_human(Board board, Player player) {
             continue;
         }
 
-        auto pid = BOARD2(board, inp.row, inp.col);
+        auto pid = BOARD(board, inp.row, inp.col);
         if (pid == NO_PIECE) {
             printf("No piece on this tile\n");
             continue;
@@ -70,8 +70,6 @@ int main() {
 
     int round = 0;
     auto board = init_board();
-    Tile inp;
-    Selection select;
 
     Player turn;
     while (checkmate(&board) == PLAYER_NONE) {
