@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ui.h"
+#include "printer.h"
 
 #define MSG_LEN 256
 #define STOP(t, x, m) if(!(x)) { sprintf((t)->msg, m); return; }

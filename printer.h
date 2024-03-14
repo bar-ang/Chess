@@ -34,3 +34,6 @@ bool sign(char *, PieceType);
 void print_board(Board);
 void print_selection(Selection);
 void print_board_code(Board);
+bool from_string(Tile *tile, char *str);
+bool to_string(char *str, Tile tile);
+Tile user_input();

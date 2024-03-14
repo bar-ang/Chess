@@ -1,11 +1,11 @@
 #include <time.h>
 #include <stdlib.h>
-#include "ui.h"
+#include "printer.h"
 
-#define MAX_NUM_TURNS 1000
+#define MAX_NUM_TURNS 100
 
 #define STARTING_PLAYER PLAYER_WHITE
-#define WHITE_IS_HUMAN true
+#define WHITE_IS_HUMAN false
 #define BLACK_IS_HUMAN false
 
 Board play_turn_computer(Board board, Player player) {
@@ -72,7 +72,7 @@ int main() {
     auto board = init_board();
 
     Player turn;
-    while (checkmate(&board) == PLAYER_NONE) {
+    while (checkmate(&board) == PLAYER_NONE && round < MAX_NUM_TURNS) {
         turn = round % 2 == 0 ? STARTING_PLAYER : OPPONENT_OF(STARTING_PLAYER);
         print_board(board);
         if ((turn == PLAYER_WHITE && WHITE_IS_HUMAN) || (turn == PLAYER_BLACK && BLACK_IS_HUMAN))
@@ -81,6 +81,11 @@ int main() {
             board = play_turn_computer(board, turn);
         round++;
     }
+
+    if (round == MAX_NUM_TURNS)
+        printf("TOO MANY TURNS\n");
+    else
+        printf("CHECK MATE after %d turns!", round);
     
     return 0;
 }
