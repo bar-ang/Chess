@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <time.h>
 #include "move.h"
 
 #define PIECE_SELECTED(select) (BOARD2(*((select)->board), (select)->pos) != NO_PIECE)
@@ -266,18 +268,37 @@ Selection select_tile(Board *board, int row, int col) {
     return select;
 }
 
-Board random_move_for_piece(Board board, int piece) {
-    return board;
+Board random_move_for_piece(Board board, int row, int col, bool *success) {
+    auto select = select_tile(&board, row, col);
+    if (select.num_possible_moves == 0) {
+        *success = false;
+        return board;
+    }
+
+    int rnd = rand() % select.num_possible_moves;
+    auto tile = select.possible_moves[rnd];
+
+    *success = true;
+    return move_selected_piece(&select, tile.row, tile.col);
 }
 
 Board random_move(Board board, Player player) {
-    auto original = board;
-    int piece;
-    while (memcmp(&original, &board, sizeof(board)) == 0) {
+    pid rnd;
+    bool success = false;
+    Board new_board;
+
+    while(!success) {
         do {
-            piece = rand() % NUM_PIECES;
-        } while (board.pieces[piece].player != player);
-        board = random_move_for_piece(board, piece);
+            rnd = (pid)(rand() % NUM_PIECES);
+        } while (board.pieces[rnd].player != player);
+    
+        for (int i = 0; i < NUM_ROWS; i++)
+            for (int j = 0; j < NUM_COLS; j++)
+                if (BOARD(board, i, j) == rnd) {
+                    new_board = random_move_for_piece(board, i, j, &success);
+                    break;
+                }
     }
-    return board;
+
+    return new_board;
 }
