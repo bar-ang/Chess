@@ -19,3 +19,4 @@ Player checkmate(Board *);
 Selection unselect(Board *);
 Board random_move_for_piece(Board, int);
 Board random_move(Board, Player);
+int adjacent_boards(Board, Player, Board *);
