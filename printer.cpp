@@ -62,6 +62,12 @@ void print_everything(Selection select, GameLog *log) {
                 if (select.threatened_pieces[k] == BOARD(*select.board, i, j))
                     bgcolor = THREATENED_PIECES_BGCOLOR;
 
+            if (log != NULL && log->length > 0) {
+                if ((LAST(log).from.row == i && LAST(log).from.col == j) || (LAST(log).to.row == i && LAST(log).to.col == j))
+                    bgcolor = GAME_LOG_BGCOLOR;
+
+            }
+
             auto pid = BOARD(*select.board, i, j);
             if (pid == NO_PIECE) {
                 PRINTCOLOR(NO_COLOR, bgcolor); 
@@ -96,6 +102,10 @@ void print_selection(Selection select) {
 
 void print_board(Board board) {
     print_selection(unselect(&board));
+}
+
+void print_last_log(GameLog *log) {
+    print_everything(unselect(log->board), log);
 }
 
 void print_board_code(Board board) {

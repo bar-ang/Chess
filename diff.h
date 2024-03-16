@@ -2,6 +2,8 @@
 
 #define LOG_LEN 1000
 
+#define LAST(log) ((log)->moves[(log)->length-1])
+
 typedef struct {
     Tile from;
     Tile to;

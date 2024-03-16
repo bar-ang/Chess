@@ -26,6 +26,7 @@
 #define THREATENED_PIECES_BGCOLOR  COLOR_BG_MAGENTA
 #define EDGE_COLOR                 COLOR_BLACK
 #define EDGE_BGCOLOR               COLOR_BG_WHITE
+#define GAME_LOG_BGCOLOR           COLOR_BG_RED
 
 #define PRINTCOLOR(fg, bg) printf("\033[1;%d;%dm", (fg), (bg))
 #define RESETCOLOR PRINTCOLOR(NO_COLOR, NO_COLOR)

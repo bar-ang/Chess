@@ -80,7 +80,8 @@ int main() {
     Player turn;
     while (checkmate(&board) == PLAYER_NONE && round < MAX_NUM_TURNS) {
         turn = round % 2 == 0 ? STARTING_PLAYER : OPPONENT_OF(STARTING_PLAYER);
-        print_board(board);
+        //print_board(board);
+        print_last_log(&log);
         if ((turn == PLAYER_WHITE && WHITE_IS_HUMAN) || (turn == PLAYER_BLACK && BLACK_IS_HUMAN))
             board = play_turn_human(board, turn, &log);
         else
