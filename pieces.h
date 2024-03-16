@@ -24,3 +24,5 @@ typedef struct piece_t {
     PieceType type;
     Player player;
 } Piece;
+
+int piece_score(Piece);
