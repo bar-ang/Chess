@@ -60,3 +60,7 @@ Tile find_king(Board *board, Player player) {
         }
     return NO_TILE;
 }
+
+bool compare_boards(Board *board1, Board *board2) {
+    return memcmp(board1, board2, sizeof(Board)) == 0;
+}

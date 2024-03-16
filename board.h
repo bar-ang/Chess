@@ -26,3 +26,4 @@ int possible_moves(Tile *, Board, int);
 Board move(Board, Piece, Tile);
 bool allowed_to_move(Board, Piece, Tile);
 Tile find_king(Board *, Player);
+bool compare_boards(Board *, Board *);
