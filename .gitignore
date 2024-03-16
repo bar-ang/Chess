@@ -4,6 +4,5 @@ cppuint/
 .ccls-cache
 .breakpoints
 .replit
-Makefile
 cppunit/
 replit.nix
