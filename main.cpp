@@ -9,9 +9,7 @@
 #define BLACK_IS_HUMAN false
 
 Board play_turn_computer(Board board, Player player) {
-    Board b;
-    reach_out(&b, &board, player, 3);
-    return b;
+    return random_move(board, player);
 }
 
 Board play_turn_human(Board board, Player player) {
