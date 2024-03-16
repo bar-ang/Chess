@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "printer.h"
 
-#define MAX_NUM_TURNS 100
+#define MAX_NUM_TURNS 15
 
 #define STARTING_PLAYER PLAYER_WHITE
 #define WHITE_IS_HUMAN false
