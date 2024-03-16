@@ -303,19 +303,16 @@ Board random_move(Board board, Player player) {
     return new_board;
 }
 
-int adjacent_boards(Board board, Player player, Board *adj_boards) {
+int adjacent_boards(Board *board, Player player, int i, int j, Board *adj_boards) {
     int num_adj_boards = 0;
 
     Selection select;
-    for (int i = 0; i < NUM_ROWS; i++)
-        for (int j = 0; j < NUM_COLS; j++) {
-            auto pid = BOARD(board, i, j);
-            if (pid == NO_PIECE || board.pieces[pid].player != player)
-                continue;
-            select = select_tile(&board, i, j);
-            for (int p = 0; p < select.num_possible_moves; p++)
-                adj_boards[num_adj_boards++] = move_selected_piece(&select, select.possible_moves[p].row, select.possible_moves[p].col);
-        }
+    auto pid = BOARD(*board, i, j);
+    if (pid == NO_PIECE || board->pieces[pid].player != player)
+        return 0;
+    select = select_tile(board, i, j);
+    for (int p = 0; p < select.num_possible_moves; p++)
+        adj_boards[num_adj_boards++] = move_selected_piece(&select, select.possible_moves[p].row, select.possible_moves[p].col);
     
     return num_adj_boards;
 }
