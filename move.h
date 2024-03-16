@@ -18,5 +18,5 @@ bool is_move_possible(Selection, int, int);
 Player checkmate(Board *);
 Selection unselect(Board *);
 Board random_move_for_piece(Board, int);
-Board random_move(Board, Player);
+Board random_move(Board, Player, Tile *, Tile *);
 int adjacent_boards(Board *, Player, int, int, Board *);

@@ -268,7 +268,7 @@ Selection select_tile(Board *board, int row, int col) {
     return select;
 }
 
-Board random_move_for_piece(Board board, int row, int col, bool *success) {
+Board random_move_for_piece(Board board, int row, int col, Tile *to, bool *success) {
     auto select = select_tile(&board, row, col);
     if (select.num_possible_moves == 0) {
         *success = false;
@@ -279,10 +279,11 @@ Board random_move_for_piece(Board board, int row, int col, bool *success) {
     auto tile = select.possible_moves[rnd];
 
     *success = true;
+    *to = tile;
     return move_selected_piece(&select, tile.row, tile.col);
 }
 
-Board random_move(Board board, Player player) {
+Board random_move(Board board, Player player, Tile *from, Tile *to) {
     pid rnd;
     bool success = false;
     Board new_board;
@@ -295,7 +296,8 @@ Board random_move(Board board, Player player) {
         for (int i = 0; i < NUM_ROWS; i++)
             for (int j = 0; j < NUM_COLS; j++)
                 if (BOARD(board, i, j) == rnd) {
-                    new_board = random_move_for_piece(board, i, j, &success);
+                    new_board = random_move_for_piece(board, i, j, to, &success);
+                    *from = {.row = i, .col = j};
                     break;
                 }
     }
