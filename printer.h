@@ -1,4 +1,4 @@
-#include "move.h"
+#include "strategy.h"
 
 #define EMPTY ' '
 
