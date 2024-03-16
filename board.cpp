@@ -64,3 +64,27 @@ Tile find_king(Board *board, Player player) {
 bool compare_boards(Board *board1, Board *board2) {
     return memcmp(board1, board2, sizeof(Board)) == 0;
 }
+
+int player_score(Board *board, Player player) {
+    int score = 0;
+    for (int i = 0; i < NUM_ROWS; i++)
+        for (int j = 0; j < NUM_COLS; j++) {
+            auto pid = BOARD(*board, i, j);
+            if (pid != NO_PIECE && board->pieces[pid].player == player)
+                score += piece_score(board->pieces[pid]);
+        }
+
+    return score;
+}
+
+int board_score(Board *board) {
+    int score = 0;
+    for (int i = 0; i < NUM_ROWS; i++)
+        for (int j = 0; j < NUM_COLS; j++) {
+            auto pid = BOARD(*board, i, j);
+            if (pid != NO_PIECE)
+                score += piece_score(board->pieces[pid]) * (board->pieces[pid].player == PLAYER_WHITE ? 1 : -1);
+        }
+
+    return score;
+}

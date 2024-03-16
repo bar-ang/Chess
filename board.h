@@ -27,3 +27,5 @@ Board move(Board, Piece, Tile);
 bool allowed_to_move(Board, Piece, Tile);
 Tile find_king(Board *, Player);
 bool compare_boards(Board *, Board *);
+int board_score(Board *);
+int player_score(Board *, Player);
