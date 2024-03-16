@@ -8,11 +8,15 @@
 #define WHITE_IS_HUMAN false
 #define BLACK_IS_HUMAN false
 
-Board play_turn_computer(Board board, Player player) {
-    return random_move(board, player);
+Board play_turn_computer(Board board, Player player, GameLog *log) {
+    Tile from;
+    Tile to;
+    auto b = random_move(board, player, &from, &to);
+    log_move(log, from, to);
+    return b;
 }
 
-Board play_turn_human(Board board, Player player) {
+Board play_turn_human(Board board, Player player, GameLog *log) {
     Tile inp;
     Selection select;
     printf("Choose a piece to move: ");
@@ -61,6 +65,7 @@ Board play_turn_human(Board board, Player player) {
             continue;
         }
 
+        log_move(log, select.pos, inp);
         return move_selected_piece(&select, inp.row, inp.col);
     }
 }
@@ -70,15 +75,16 @@ int main() {
 
     int round = 0;
     auto board = init_board();
+    GameLog log = new_log(&board);
 
     Player turn;
     while (checkmate(&board) == PLAYER_NONE && round < MAX_NUM_TURNS) {
         turn = round % 2 == 0 ? STARTING_PLAYER : OPPONENT_OF(STARTING_PLAYER);
         print_board(board);
         if ((turn == PLAYER_WHITE && WHITE_IS_HUMAN) || (turn == PLAYER_BLACK && BLACK_IS_HUMAN))
-            board = play_turn_human(board, turn);
+            board = play_turn_human(board, turn, &log);
         else
-            board = play_turn_computer(board, turn);
+            board = play_turn_computer(board, turn, &log);
         round++;
     }
 
