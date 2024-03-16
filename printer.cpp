@@ -30,7 +30,7 @@ bool sign(char *str, PieceType type) {
     return true;
 }
 
-void print_selection(Selection select) {
+void print_everything(Selection select, GameLog *log) {
     if (!select.board) {
         printf(">>> NO BOARD <<<\n");
         return;
@@ -88,6 +88,10 @@ void print_selection(Selection select) {
     printf("  ");
     RESETCOLOR;
     printf("\n");
+}
+
+void print_selection(Selection select) {
+    print_everything(select, NULL);
 }
 
 void print_board(Board board) {
