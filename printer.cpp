@@ -25,6 +25,7 @@ bool sign(char *str, PieceType type) {
             sprintf(str, "P");
             break;
         default:
+            sprintf(str, "X");
             return false;
     }
     return true;
@@ -65,7 +66,6 @@ void print_everything(Selection select, GameLog *log) {
             if (log != NULL && log->length > 0) {
                 if ((LAST(log).from.row == i && LAST(log).from.col == j) || (LAST(log).to.row == i && LAST(log).to.col == j))
                     bgcolor = GAME_LOG_BGCOLOR;
-
             }
 
             auto pid = BOARD(*select.board, i, j);
@@ -132,7 +132,7 @@ bool to_string(char *str, Tile tile) {
     if (tile.row < 0 || tile.row > 7 || tile.col < 0 || tile.col > 7)
         return false;
 
-    sprintf(str, "%c%d", tile.row + '1', tile.col + 'A');
+    sprintf(str, "%c%c", tile.row + '1', tile.col + 'A');
     return true;
 }
 
