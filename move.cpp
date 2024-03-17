@@ -132,6 +132,10 @@ Player checkmate(Board *board) {
 void delete_possible_moves_due_to_check(Selection *select) {
     auto player = get_selected_piece(select).player;
 
+    if (player == PLAYER_NONE) {
+        return;
+    }
+
     if (checking_pieces(NULL, select->board, player) == 0)
         return;
     
