@@ -42,28 +42,40 @@ Board move_selected_piece(Selection *select, int row, int col) {
     Board board = *select->board;
     if (!PIECE_SELECTED(select))
         return board;
+
+    ASSERT(is_move_possible(select, row, col));
+
     auto pid = BOARD2(board, select->pos);
     BOARD(board, row, col) = pid;
     BOARD2(board, select->pos) = NO_PIECE;
+
+    ASSERT(pid != NO_PIECE);
 
     board.num_times_piece_has_moved[pid]++;
 
     // pawn promotion
     if ((row == 0 || row == 7) && board.pieces[pid].type == PIECE_PAWN) {
+        ASSERT((board.pieces[pid].player == PLAYER_BLACK && row == 0) || (board.pieces[pid].player == PLAYER_WHITE && row == 7))
         board.pieces[pid].type = PIECE_QUEEN;
     }
 
     // casteling
     if (board.pieces[pid].type == PIECE_KING) {
+#if DEBUG_MODE
+        auto score = board_score(&board);
+#endif
         if (col - select->pos.col == 2) {
+            ASSERT(board.pieces[BOARD(board, row, 7)].type == PIECE_ROOK)
             board.num_times_piece_has_moved[BOARD(board, row, 7)]++;
             BOARD(board, row, col-1) = BOARD(board, row, 7);
             BOARD(board, row, 7) = NO_PIECE;
         } else if (col - select->pos.col == -2) {
+            ASSERT(board.pieces[BOARD(board, row, 0)].type == PIECE_ROOK)
             board.num_times_piece_has_moved[BOARD(board, row, 0)]++;
             BOARD(board, row, col+1) = BOARD(board, row, 0);
             BOARD(board, row, 0) = NO_PIECE;
         }
+        ASSERT(board_score(&board) == score);
     }
     
     return board;
@@ -133,6 +145,7 @@ void delete_possible_moves_due_to_check(Selection *select) {
     auto player = get_selected_piece(select).player;
 
     if (player == PLAYER_NONE) {
+        FAIL;
         return;
     }
 
