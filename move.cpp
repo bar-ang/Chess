@@ -42,16 +42,15 @@ Board move_selected_piece(Selection *select, int row, int col) {
     Board board = *select->board;
     if (!PIECE_SELECTED(select))
         return board;
-    BOARD(board, row, col) = BOARD2(board, select->pos);
+    auto pid = BOARD2(board, select->pos);
+    BOARD(board, row, col) = pid;
     BOARD2(board, select->pos) = NO_PIECE;
 
-    auto pid = BOARD(board, row, col);
     board.num_times_piece_has_moved[pid]++;
 
     // pawn promotion
-    if (row == 0 || row == 7) {
-        if (board.pieces[pid].type == PIECE_PAWN)
-            board.pieces[pid].type = PIECE_QUEEN;
+    if ((row == 0 || row == 7) && board.pieces[pid].type == PIECE_PAWN) {
+        board.pieces[pid].type = PIECE_QUEEN;
     }
 
     // casteling
