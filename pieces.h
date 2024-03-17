@@ -1,3 +1,5 @@
+#include "config.h"
+
 #define NUM_ROWS 8
 #define NUM_COLS 8
 #define NUM_TILES (NUM_ROWS * NUM_COLS)
