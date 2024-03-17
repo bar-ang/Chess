@@ -60,7 +60,7 @@ Board play_turn_human(Board board, Player player, GameLog *log) {
             continue;
         }
 
-        if (!is_move_possible(select, inp.row, inp.col)) {
+        if (!is_move_possible(&select, inp.row, inp.col)) {
             printf("cannot move there.\n");
             continue;
         }

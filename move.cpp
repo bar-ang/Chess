@@ -21,9 +21,9 @@ bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
     return false;
 }
 
-bool is_move_possible(Selection select, int row, int col) {
-    for (int i = 0; i < select.num_possible_moves; i++)
-        if (select.possible_moves[i].row == row && select.possible_moves[i].col == col)
+bool is_move_possible(Selection *select, int row, int col) {
+    for (int i = 0; i < select->num_possible_moves; i++)
+        if (select->possible_moves[i].row == row && select->possible_moves[i].col == col)
             return true;
     return false;
 }
