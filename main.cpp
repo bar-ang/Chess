@@ -2,7 +2,11 @@
 #include <stdlib.h>
 #include "printer.h"
 
-#define MAX_NUM_TURNS 15
+#if DEBUG_MODE
+#define MAX_NUM_TURNS 7
+#else
+#define MAX_NUM_TURNS 800
+#endif
 
 #define STARTING_PLAYER PLAYER_WHITE
 #define WHITE_IS_HUMAN false
@@ -13,6 +17,15 @@ Board play_turn_computer(Board board, Player player, GameLog *log) {
     Tile to;
     auto b = random_move(board, player, &from, &to);
     log_move(log, from, to);
+#if DEBUG_MODE
+        char s[5];
+        char l[5];
+        char r[5];
+        sign(s, board.pieces[BOARD2(board, from)].type);
+        to_string(l, from);
+        to_string(r, to);
+        printf(_DEBUG"moving %s from %s to %s. (computer move)\n", s, l, r);
+#endif
     return b;
 }
 
@@ -48,6 +61,14 @@ Board play_turn_human(Board board, Player player, GameLog *log) {
             printf("This piece cannot move.\n");
             continue;
         }
+
+#if DEBUG_MODE
+        char s[3];
+        char l[3];
+        sign(s, board.pieces[BOARD2(board, inp)].type);
+        to_string(l, inp);
+        printf(_DEBUG"Selected %s in %s. %d possible moves.\n", s, l, select.num_possible_moves);
+#endif
         
         break;
     }
@@ -71,6 +92,9 @@ Board play_turn_human(Board board, Player player, GameLog *log) {
 }
 
 int main() {
+#if DEBUG_MODE
+    printf("RUNNING IN DEBUG MODE.\n");
+#endif
     srand(time(NULL));
 
     int round = 0;
