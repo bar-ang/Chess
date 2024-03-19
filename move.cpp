@@ -187,6 +187,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
 
             // Casteling
             if (board->num_times_piece_has_moved[pid] == 0) {
+                ASSERT((piece.player == PLAYER_WHITE && row == 0) || (piece.player == PLAYER_BLACK && row == NUM_COLS - 1))
                 auto rook = BOARD(*board, row, 0);
                 if (rook == PIECE_ROOK && board->pieces[rook].player == piece.player && board->num_times_piece_has_moved[rook] == 0) {
                     for (int t = 0; t < col; t++)
