@@ -182,9 +182,9 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
                     select_update(&sel, board, {.row = row, .col = col - 2}, piece);
                 }
 second_rook:                
-                rook = BOARD(*board, row, 7);
+                rook = BOARD(*board, row, NUM_COLS-1);
                 if (rook == PIECE_ROOK && board->pieces[rook].player == piece.player && board->num_times_piece_has_moved[rook] == 0) {
-                    for (int t = col+1; t < 8; t++)
+                    for (int t = col+1; t < NUM_COLS; t++)
                         if (BOARD(*board, row, t) != NO_PIECE)
                             goto end;
                     select_update(&sel, board, {.row = row, .col = col + 2}, piece);
