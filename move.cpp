@@ -38,7 +38,7 @@ Selection unselect(Board *board) {
     return sel;
 }
 
-Board move_selected_piece(Selection *select, int row, int col) {
+Board move_selected_piece(Selection *select, int row, int col, pid *eaten_piece) {
     Board board = *select->board;
     if (!PIECE_SELECTED(select))
         return board;
@@ -46,6 +46,8 @@ Board move_selected_piece(Selection *select, int row, int col) {
     ASSERT(is_move_possible(select, row, col));
 
     auto pid = BOARD2(board, select->pos);
+    if (eaten_piece != NULL)
+        *eaten_piece = BOARD(board, row, col);
     BOARD(board, row, col) = pid;
     BOARD2(board, select->pos) = NO_PIECE;
 
@@ -153,7 +155,7 @@ void delete_possible_moves_due_to_check(Selection *select) {
         return;
     
     for (int i = 0; i < select->num_possible_moves; i++) {
-        Board hypo_board = move_selected_piece(select, select->possible_moves[i].row, select->possible_moves[i].col);
+        Board hypo_board = move_selected_piece(select, select->possible_moves[i].row, select->possible_moves[i].col, NULL);
         if (checking_pieces(NULL, &hypo_board, player) > 0) {
             select->possible_moves[i] = NO_TILE;
         }
@@ -297,7 +299,7 @@ Board random_move_for_piece(Board board, int row, int col, Tile *to, bool *succe
 
     *success = true;
     *to = tile;
-    return move_selected_piece(&select, tile.row, tile.col);
+    return move_selected_piece(&select, tile.row, tile.col, NULL);
 }
 
 Board random_move(Board board, Player player, Tile *from, Tile *to) {
@@ -331,7 +333,7 @@ int adjacent_boards(Board *board, Player player, int i, int j, Board *adj_boards
         return 0;
     select = select_tile(board, i, j);
     for (int p = 0; p < select.num_possible_moves; p++)
-        adj_boards[num_adj_boards++] = move_selected_piece(&select, select.possible_moves[p].row, select.possible_moves[p].col);
+        adj_boards[num_adj_boards++] = move_selected_piece(&select, select.possible_moves[p].row, select.possible_moves[p].col, NULL);
     
     return num_adj_boards;
 }

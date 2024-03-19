@@ -87,7 +87,7 @@ Board play_turn_human(Board board, Player player, GameLog *log) {
         }
 
         log_move(log, select.pos, inp);
-        return move_selected_piece(&select, inp.row, inp.col);
+        return move_selected_piece(&select, inp.row, inp.col, NULL);
     }
 }
 
