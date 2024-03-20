@@ -20,3 +20,4 @@ Selection unselect(Board *);
 Board random_move_for_piece(Board, int);
 Board random_move(Board, Player, Tile *, Tile *);
 int adjacent_boards(Board *, Player, int, int, Board *);
+int num_possible_moves(Selection *);

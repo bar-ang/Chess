@@ -7,6 +7,16 @@
 
 Selection select_tile_ignore_check(Board *board, int row, int col);
 
+int num_possible_moves(Selection *select) {
+    int c = 0;
+    for (auto m = select->possible_moves; m < select->possible_moves + select->possible_moves_len; m++) {
+        ASSERT(m->row <= NUM_ROWS && m->col <= NUM_COLS);
+        if (m->row > 0 && m->col > 0)
+            c++;
+    }
+    return c;
+}
+
 bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
     auto pid = BOARD2(*board, c);
     ASSERTE(c.row >= 0 && c.row <= NUM_ROWS && c.col >= 0 && c.col <= NUM_COLS, printf("update (%d, %d)\n" , c.row, c.col))
