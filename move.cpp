@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "move.h"
 
@@ -8,6 +9,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col);
 
 bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
     auto pid = BOARD2(*board, c);
+    ASSERTE(c.row >= 0 && c.row <= NUM_ROWS && c.col >= 0 && c.col <= NUM_COLS, printf("update (%d, %d)\n" , c.row, c.col))
     if (pid == NO_PIECE)
         sel->possible_moves[sel->num_possible_moves++] = c;
     else {
@@ -22,6 +24,7 @@ bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
 }
 
 bool is_move_possible(Selection *select, int row, int col) {
+    ASSERT(row >= 0 && row <= NUM_ROWS && col >= 0 && col <= NUM_COLS)
     for (int i = 0; i < select->num_possible_moves; i++)
         if (select->possible_moves[i].row == row && select->possible_moves[i].col == col)
             return true;
@@ -39,15 +42,33 @@ Selection unselect(Board *board) {
 }
 
 Board move_selected_piece(Selection *select, int row, int col, pid *eaten_piece) {
-    Board board = *select->board;
+    auto board = *select->board;
     if (!PIECE_SELECTED(select))
         return board;
+
+#if DEBUG_MODE
+    ASSERTE(row >= 0 && row <= NUM_ROWS && col >= 0 && col <= NUM_COLS, printf("moving (%d, %d) -> (%d, %d)\n", select->pos.row, select->pos.col, row, col))
+    ASSERT(row != select->pos.row || col != select->pos.col);
+    bool onboard[NUM_PIECES];
+    memset(onboard, 0, sizeof(onboard));
+
+    for (int i =0 ;i < NUM_TILES; i++) {
+        if (board.board[i] != NO_PIECE) {
+            ASSERT(!onboard[board.board[i]]);
+            onboard[board.board[i]] = true;
+        }
+    }
+#endif
 
     ASSERT(is_move_possible(select, row, col));
 
     auto pid = BOARD2(board, select->pos);
+#if DEBUG_MODE
+    auto d_eaten_piece = BOARD(board, row, col);
+#endif
     if (eaten_piece != NULL)
         *eaten_piece = BOARD(board, row, col);
+
     BOARD(board, row, col) = pid;
     BOARD2(board, select->pos) = NO_PIECE;
 
@@ -80,6 +101,29 @@ Board move_selected_piece(Selection *select, int row, int col, pid *eaten_piece)
         ASSERT(board_score(&board) == score);
     }
     
+#if DEBUG_MODE
+    ASSERT(memcmp(board.board, select->board->board, sizeof(board.board)) != 0);
+    ASSERT(d_eaten_piece == NO_PIECE || board.pieces[d_eaten_piece].type != PIECE_KING);
+    bool onboard2[NUM_PIECES];
+    memset(onboard2, 0, sizeof(onboard2));
+
+    for (int i =0 ;i < NUM_TILES; i++) {
+        if (board.board[i] != NO_PIECE) {
+            ASSERT(!onboard2[board.board[i]]);
+            ASSERTE(board.board[i] != d_eaten_piece, printf("%d is still on board at %d although eaten\n", d_eaten_piece, i));
+            onboard2[board.board[i]] = true;
+        }
+    }
+
+    for (int i = 0 ;i < NUM_PIECES; i++) {
+            if (i != d_eaten_piece) {
+                ASSERTE(onboard[i] == onboard2[i], printf("%d is inconsistent. was? %d, now? %d\n", i, onboard[i], onboard2[i]));
+            }
+            else {
+                ASSERTE(onboard[i] && !onboard2[i], printf("%d is inconsistent. was? %d eaten? %d (eaten piece: %d)\n", i, onboard[i], !onboard2[i], d_eaten_piece));
+            }
+    }
+#endif
     return board;
 }
 
@@ -155,6 +199,7 @@ void delete_possible_moves_due_to_check(Selection *select) {
         return;
     
     for (int i = 0; i < select->num_possible_moves; i++) {
+        ASSERT(select->possible_moves[i].row >= 0 && select->possible_moves[i].col >= 0)
         Board hypo_board = move_selected_piece(select, select->possible_moves[i].row, select->possible_moves[i].col, NULL);
         if (checking_pieces(NULL, &hypo_board, player) > 0) {
             select->possible_moves[i] = NO_TILE;
