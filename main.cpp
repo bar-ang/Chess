@@ -3,7 +3,7 @@
 #include "printer.h"
 
 #if DEBUG_MODE
-#define MAX_NUM_TURNS 7
+#define MAX_NUM_TURNS 200
 #else
 #define MAX_NUM_TURNS 800
 #endif
