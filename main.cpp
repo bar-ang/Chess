@@ -57,7 +57,7 @@ Board play_turn_human(Board board, Player player, GameLog *log) {
             continue;
         }
         
-        if (select.num_possible_moves == 0) {
+        if (select.possible_moves_len == 0) {
             printf("This piece cannot move.\n");
             continue;
         }
@@ -67,7 +67,7 @@ Board play_turn_human(Board board, Player player, GameLog *log) {
         char l[3];
         sign(s, board.pieces[BOARD2(board, inp)].type);
         to_string(l, inp);
-        printf(_DEBUG"Selected %s in %s. %d possible moves.\n", s, l, select.num_possible_moves);
+        printf(_DEBUG"Selected %s in %s. %d possible moves.\n", s, l, select.possible_moves_len);
 #endif
         
         break;

@@ -5,7 +5,7 @@ typedef struct selection_t {
     Board *board;
     Tile pos;
 Tile possible_moves[NUM_TILES];
-    int num_possible_moves;
+    int possible_moves_len;
     pid threatened_pieces[NUM_PIECES_BLACK]; //assume black and white have the same num of pieces
     int num_threatened_pieces;
 } Selection;

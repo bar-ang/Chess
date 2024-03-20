@@ -20,7 +20,7 @@ struct test_result {
 };
 
 bool move_is_possible(Selection *select, int row, int col) {
-    for (int i = 0; i < select->num_possible_moves; i++) {
+    for (int i = 0; i < select->possible_moves_len; i++) {
         if (select->possible_moves[i].row == row && select->possible_moves[i].col == col)
             return true;
     }
