@@ -102,7 +102,7 @@ int main() {
     GameLog log = new_log(&board);
 
     Player turn;
-    while (checkmate(&board) == PLAYER_NONE && round < MAX_NUM_TURNS) {
+    while (checkmate(&board) == PLAYER_NONE && !stalemate(&board) && round < MAX_NUM_TURNS) {
         turn = round % 2 == 0 ? STARTING_PLAYER : OPPONENT_OF(STARTING_PLAYER);
         print_last_log(&log);
         if ((turn == PLAYER_WHITE && WHITE_IS_HUMAN) || (turn == PLAYER_BLACK && BLACK_IS_HUMAN))
