@@ -12,5 +12,8 @@ main: $(SRCS) $(HEADERS)
 main-debug: $(SRCS) $(HEADERS)
 	$(CXX) $(CXXFLAGS) -U_FORTIFY_SOURCE -O0 $(SRCS) -o "$@"
 
+preprocess:
+	$(CXX) $(CXXFLAGS) -E $(SRCS) > "$@".cc
+
 clean:
 	rm -f main main-debug
