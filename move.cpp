@@ -25,7 +25,8 @@ bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
     else {
         auto p2 = board->pieces[pid];
         if (piece.player != p2.player) {
-            sel->possible_moves[sel->possible_moves_len++] = c;
+            if (piece.type != PIECE_KING)
+                sel->possible_moves[sel->possible_moves_len++] = c;
             sel->threatened_pieces[sel->num_threatened_pieces++] = pid;
         }
         return true;
@@ -322,7 +323,8 @@ end:
                 Tile d = {.row = row + dir, .col = col + 1};
                 if (IN_BOUNDS(d)) {
                     ASSERT(row + dir >= 0 && row + dir < NUM_ROWS && col + 1 >= 0 && col + 1 < NUM_COLS)
-                    sel.possible_moves[sel.possible_moves_len++] = d;
+                    if (board->pieces[pid].type != PIECE_KING)
+                        sel.possible_moves[sel.possible_moves_len++] = d;
                     sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
                 }
             }
@@ -332,7 +334,8 @@ end:
                 Tile d = {.row = row + dir, .col = col - 1};
                 if (IN_BOUNDS(d)) {
                     ASSERT(row + dir >= 0 && row + dir < NUM_ROWS && col - 1 >= 0 && col - 1 < NUM_COLS)
-                    sel.possible_moves[sel.possible_moves_len++] = {.row = row + dir, .col = col - 1};
+                    if (board->pieces[pid].type != PIECE_KING)
+                        sel.possible_moves[sel.possible_moves_len++] = {.row = row + dir, .col = col - 1};
                     sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
                 }
             }
