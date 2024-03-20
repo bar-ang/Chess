@@ -189,6 +189,35 @@ int is_in_checkmate(Board *board, Player player, pid *resolvers) {
     return count;
 }
 
+bool player_can_move(Board *board, Player player) {
+    for (int i = 0; i < NUM_ROWS; i++)
+        for (int j = 0; j < NUM_COLS; j++) {
+            auto pid = BOARD(*board, i, j);
+            if (pid != NO_PIECE && board->pieces[pid].player == player) {
+                auto select = select_tile(board, i, j);
+                if (num_possible_moves(&select) > 0)
+                    return true;
+            }
+        }
+
+    return false;
+}
+
+bool stalemate_by_agreement(Board *board) {
+    return false;
+}
+
+bool stalemate_by_repetition(Board *board) {
+    return false;
+}
+
+bool stalemate(Board *board) {
+    return  stalemate_by_agreement(board) ||
+            stalemate_by_repetition(board) ||
+            !player_can_move(board, PLAYER_BLACK) ||
+            !player_can_move(board, PLAYER_WHITE);
+}
+
 Player checkmate(Board *board) {
     if (checking_pieces(NULL, board, PLAYER_WHITE) > 0 && is_in_checkmate(board, PLAYER_WHITE, NULL) == 0)
         return PLAYER_WHITE;
