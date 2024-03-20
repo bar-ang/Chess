@@ -11,11 +11,11 @@ bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
     auto pid = BOARD2(*board, c);
     ASSERTE(c.row >= 0 && c.row <= NUM_ROWS && c.col >= 0 && c.col <= NUM_COLS, printf("update (%d, %d)\n" , c.row, c.col))
     if (pid == NO_PIECE)
-        sel->possible_moves[sel->num_possible_moves++] = c;
+        sel->possible_moves[sel->possible_moves_len++] = c;
     else {
         auto p2 = board->pieces[pid];
         if (piece.player != p2.player) {
-            sel->possible_moves[sel->num_possible_moves++] = c;
+            sel->possible_moves[sel->possible_moves_len++] = c;
             sel->threatened_pieces[sel->num_threatened_pieces++] = pid;
         }
         return true;
@@ -25,7 +25,7 @@ bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
 
 bool is_move_possible(Selection *select, int row, int col) {
     ASSERT(row >= 0 && row <= NUM_ROWS && col >= 0 && col <= NUM_COLS)
-    for (int i = 0; i < select->num_possible_moves; i++)
+    for (int i = 0; i < select->possible_moves_len; i++)
         if (select->possible_moves[i].row == row && select->possible_moves[i].col == col)
             return true;
     return false;
@@ -34,7 +34,7 @@ bool is_move_possible(Selection *select, int row, int col) {
 Selection unselect(Board *board) {
     Selection sel;
     sel.board = board;
-    sel.num_possible_moves = 0;
+    sel.possible_moves_len = 0;
     sel.num_threatened_pieces = 0;
     sel.pos = NO_TILE;
 
@@ -167,7 +167,7 @@ int is_in_checkmate(Board *board, Player player, pid *resolvers) {
                 continue;
             if (board->pieces[pid].player == player) {
                 auto select = select_tile(board, i, j);
-                if (select.num_possible_moves > 0) {
+                if (select.possible_moves_len > 0) {
                     if (resolvers != NULL)
                         resolvers[count++] = pid;
                     else
@@ -198,7 +198,7 @@ void delete_possible_moves_due_to_check(Selection *select) {
     if (checking_pieces(NULL, select->board, player) == 0)
         return;
     
-    for (int i = 0; i < select->num_possible_moves; i++) {
+    for (int i = 0; i < select->possible_moves_len; i++) {
         ASSERT(select->possible_moves[i].row >= 0 && select->possible_moves[i].col >= 0)
         Board hypo_board = move_selected_piece(select, select->possible_moves[i].row, select->possible_moves[i].col, NULL);
         if (checking_pieces(NULL, &hypo_board, player) > 0) {
@@ -214,7 +214,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
     sel.board = board;
     sel.pos.row = row;
     sel.pos.col = col;
-    sel.num_possible_moves = 0;
+    sel.possible_moves_len = 0;
     sel.num_threatened_pieces = 0;
 
     auto pid = BOARD(*board, row, col);
@@ -295,7 +295,7 @@ end:
             if (IN_BOUNDS(c)) {
                 auto pid = BOARD2(*board, c);
                 if (pid == NO_PIECE)
-                    sel.possible_moves[sel.num_possible_moves++] = c;
+                    sel.possible_moves[sel.possible_moves_len++] = c;
             }
 
             if ((piece.player == PLAYER_WHITE && row == 1) || (piece.player == PLAYER_BLACK && row == 6)) {
@@ -303,7 +303,7 @@ end:
                 if (IN_BOUNDS(c) && BOARD(*board, row + dir, col) == NO_PIECE) {
                     auto pid = BOARD2(*board, c);
                     if (pid == NO_PIECE)
-                        sel.possible_moves[sel.num_possible_moves++] = c;
+                        sel.possible_moves[sel.possible_moves_len++] = c;
                 }
             }
 
@@ -312,7 +312,7 @@ end:
                 Tile d = {.row = row + dir, .col = col + 1};
                 if (IN_BOUNDS(d)) {
                     ASSERT(row + dir >= 0 && row + dir < NUM_ROWS && col + 1 >= 0 && col + 1 < NUM_COLS)
-                    sel.possible_moves[sel.num_possible_moves++] = d;
+                    sel.possible_moves[sel.possible_moves_len++] = d;
                     sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
                 }
             }
@@ -322,7 +322,7 @@ end:
                 Tile d = {.row = row + dir, .col = col - 1};
                 if (IN_BOUNDS(d)) {
                     ASSERT(row + dir >= 0 && row + dir < NUM_ROWS && col - 1 >= 0 && col - 1 < NUM_COLS)
-                    sel.possible_moves[sel.num_possible_moves++] = {.row = row + dir, .col = col - 1};
+                    sel.possible_moves[sel.possible_moves_len++] = {.row = row + dir, .col = col - 1};
                     sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
                 }
             }
@@ -343,7 +343,7 @@ Selection select_tile(Board *board, int row, int col) {
 
 Board random_move_for_piece(Board board, int row, int col, Tile *to, bool *success) {
     auto select = select_tile(&board, row, col);
-    if (select.num_possible_moves == 0) {
+    if (select.possible_moves_len == 0) {
         *success = false;
         return board;
     }
@@ -351,7 +351,7 @@ Board random_move_for_piece(Board board, int row, int col, Tile *to, bool *succe
     Tile tile;
     int rnd;
     do {
-        rnd = rand() % select.num_possible_moves;
+        rnd = rand() % select.possible_moves_len;
         tile = select.possible_moves[rnd];
     } while (tile.row < 0 || tile.col < 0); //remeber there are moves that were deleted due to check!
 
@@ -390,7 +390,7 @@ int adjacent_boards(Board *board, Player player, int i, int j, Board *adj_boards
     if (pid == NO_PIECE || board->pieces[pid].player != player)
         return 0;
     select = select_tile(board, i, j);
-    for (int p = 0; p < select.num_possible_moves; p++)
+    for (int p = 0; p < select.possible_moves_len; p++)
         adj_boards[num_adj_boards++] = move_selected_piece(&select, select.possible_moves[p].row, select.possible_moves[p].col, NULL);
     
     return num_adj_boards;

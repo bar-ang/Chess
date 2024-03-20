@@ -56,7 +56,7 @@ void print_everything(Selection select, GameLog *log) {
             bgcolor = ((i+j) % 2) ? WHITE_TILE_BGCOLOR : BLACK_TILE_BGCOLOR;
             if (select.pos.row == i && select.pos.col == j)
                 bgcolor = SELECTED_PIECE_BGCOLOR;
-            for (int k = 0; k < select.num_possible_moves; k++)
+            for (int k = 0; k < select.possible_moves_len; k++)
                 if (select.possible_moves[k].row == i && select.possible_moves[k].col == j)
                     bgcolor = POSSIBLE_MOVE_BGCOLOR;
             for (int k = 0; k < select.num_threatened_pieces; k++)
