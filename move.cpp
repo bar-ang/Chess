@@ -353,7 +353,7 @@ Selection select_tile(Board *board, int row, int col) {
 
 Board random_move_for_piece(Board board, int row, int col, Tile *to, bool *success) {
     auto select = select_tile(&board, row, col);
-    if (select.possible_moves_len == 0) {
+    if (num_possible_moves(&select) == 0) {
         *success = false;
         return board;
     }
