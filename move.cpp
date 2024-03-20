@@ -309,20 +309,29 @@ end:
 
             auto pid = BOARD(*board, row + dir, col + 1);
             if (pid != NO_PIECE && board->pieces[pid].player != piece.player) {
-                sel.possible_moves[sel.num_possible_moves++] = {.row = row + dir, .col = col + 1};
-                sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
+                Tile d = {.row = row + dir, .col = col + 1};
+                if (IN_BOUNDS(d)) {
+                    ASSERT(row + dir >= 0 && row + dir < NUM_ROWS && col + 1 >= 0 && col + 1 < NUM_COLS)
+                    sel.possible_moves[sel.num_possible_moves++] = d;
+                    sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
+                }
             }
 
             pid = BOARD(*board, row + dir, col - 1);
             if (pid != NO_PIECE && board->pieces[pid].player != piece.player) {
-                sel.possible_moves[sel.num_possible_moves++] = {.row = row + dir, .col = col - 1};
-                sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
+                Tile d = {.row = row + dir, .col = col - 1};
+                if (IN_BOUNDS(d)) {
+                    ASSERT(row + dir >= 0 && row + dir < NUM_ROWS && col - 1 >= 0 && col - 1 < NUM_COLS)
+                    sel.possible_moves[sel.num_possible_moves++] = {.row = row + dir, .col = col - 1};
+                    sel.threatened_pieces[sel.num_threatened_pieces++] = pid;
+                }
             }
             break;
         }
         default:
             return unselect(board);
     }
+
     return sel;
 
 }
