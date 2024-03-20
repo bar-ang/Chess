@@ -348,8 +348,12 @@ Board random_move_for_piece(Board board, int row, int col, Tile *to, bool *succe
         return board;
     }
 
-    int rnd = rand() % select.num_possible_moves;
-    auto tile = select.possible_moves[rnd];
+    Tile tile;
+    int rnd;
+    do {
+        rnd = rand() % select.num_possible_moves;
+        tile = select.possible_moves[rnd];
+    } while (tile.row < 0 || tile.col < 0); //remeber there are moves that were deleted due to check!
 
     *success = true;
     *to = tile;
