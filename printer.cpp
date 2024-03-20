@@ -77,7 +77,14 @@ void print_everything(Selection select, GameLog *log) {
                 sign(str, piece.type);
                 PRINTCOLOR(piece.player == PLAYER_WHITE ? WHITE_PLAYER_COLOR : BLACK_PLAYER_COLOR, bgcolor);
             }
+#if !DEBUG_MODE
             printf(" %s ", str);
+#else
+            if (pid != NO_PIECE)
+                printf("%s%02d", str, pid);       
+            else
+                printf(" %s ", str);
+#endif
             RESETCOLOR;
         }
         PRINTCOLOR(EDGE_COLOR, EDGE_BGCOLOR);
