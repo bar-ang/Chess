@@ -1,3 +1,3 @@
 #include "diff.h"
 
-int reach_out(Board *, Board *, Player, int);
+int calculate_best_next_step(Board *, Board *, Player, int);
