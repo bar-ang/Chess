@@ -8,22 +8,26 @@
 #define MAX_NUM_TURNS 800
 #endif
 
+#define STRATEGY_DEPTH 3
 #define STARTING_PLAYER PLAYER_WHITE
 #define WHITE_IS_HUMAN false
 #define BLACK_IS_HUMAN false
 
 Board play_turn_computer(Board board, Player player, GameLog *log) {
-    Tile from;
-    Tile to;
-    auto b = random_move(board, player, &from, &to);
-    log_move(log, from, to);
+    Diff diff;
+    Board b;
+    calculate_best_next_step(&board, player, STRATEGY_DEPTH, &b);
+    print_board(board);
+    print_board(b);
+    diff_of_boards(&diff, &board, &b);
+    log_move(log, diff.from, diff.to);
 #if DEBUG_MODE
         char s[5];
         char l[5];
         char r[5];
-        sign(s, board.pieces[BOARD2(board, from)].type);
-        to_string(l, from);
-        to_string(r, to);
+        sign(s, board.pieces[BOARD2(board, diff.from)].type);
+        to_string(l, diff.from);
+        to_string(r, diff.to);
         printf(_DEBUG"moving %s from %s to %s. (computer move)\n", s, l, r);
 #endif
     return b;

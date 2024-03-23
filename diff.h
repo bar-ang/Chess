@@ -15,6 +15,6 @@ typedef struct {
     int length;
 } GameLog;
 
-bool diff_of_boards(Diff *, Board *, Board *);
+void diff_of_boards(Diff *, Board *, Board *);
 void log_move(GameLog *, Tile, Tile);
 GameLog new_log(Board *);
