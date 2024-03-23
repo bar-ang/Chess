@@ -1,4 +1,4 @@
-#include "diff.h"
+#include "strategy.h"
 
 #define EMPTY ' '
 
