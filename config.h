@@ -25,4 +25,6 @@
 #define SET_BISHOPS false
 #define SET_KNIGHTS false
 #define SET_ROOKS   false
-#define SET_KINGS   true
+#define SET_KINGS   true
+
+#define DEBUG_PRINTER true
