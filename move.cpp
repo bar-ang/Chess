@@ -6,6 +6,7 @@
 #define PIECE_SELECTED(select) (BOARD2(*((select)->board), (select)->pos) != NO_PIECE)
 
 Selection select_tile_ignore_check(Board *, int, int);
+int checking_pieces(pid *, Board *, Player);
 
 int num_possible_moves(Selection *select) {
     int c = 0;
@@ -58,6 +59,9 @@ Board move_selected_piece(Selection *select, int row, int col, pid *eaten_piece)
         return board;
 
 #if DEBUG_MODE
+
+    auto check = checking_pieces(NULL, &board, SELECTED_PIECE(select).player);
+
     ASSERTE(row >= 0 && row <= NUM_ROWS && col >= 0 && col <= NUM_COLS, printf("moving (%d, %d) -> (%d, %d)\n", select->pos.row, select->pos.col, row, col))
     ASSERT(row != select->pos.row || col != select->pos.col);
     bool onboard[NUM_PIECES];
@@ -134,6 +138,10 @@ Board move_selected_piece(Selection *select, int row, int col, pid *eaten_piece)
                 ASSERTE(onboard[i] && !onboard2[i], printf("%d is inconsistent. was? %d eaten? %d (eaten piece: %d)\n", i, onboard[i], !onboard2[i], d_eaten_piece));
             }
     }
+
+    auto check2 = checking_pieces(NULL, &board, SELECTED_PIECE(select).player);
+    ASSERTE(!check2, printf("move caused the king to fall into check. supposed to resolve? %d\n", check));
+    
 #endif
     return board;
 }
