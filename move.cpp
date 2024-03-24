@@ -32,6 +32,11 @@ bool select_update(Selection *sel, Board *board, Tile c, Piece piece) {
         }
         return true;
     }
+
+#if DEBUG_MODE
+    auto pq = BOARD2(*board, sel->possible_moves[sel->possible_moves_len-1]);
+    ASSERT(pq == PIECE_NONE || pq != PIECE_KING);
+#endif
     return false;
 }
 
@@ -383,6 +388,13 @@ end:
         default:
             return unselect(board);
     }
+
+#if DEBUG_MODE
+    for (int i = 0; i < sel.possible_moves_len; i++){
+        auto pq = BOARD2(*board, sel.possible_moves[i]);
+        ASSERTE(pq == NO_PIECE || board->pieces[pq].type != PIECE_KING, printf("selected type at (%d, %d)->(%d, %d): %d\n", row, col, sel.possible_moves[i].row, sel.possible_moves[i].col, piece.type))
+    }
+#endif
 
     return sel;
 
