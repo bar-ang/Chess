@@ -17,8 +17,11 @@ Board play_turn_computer(Board board, Player player, GameLog *log) {
     Diff diff;
     Board b;
     calculate_best_next_step(&board, player, STRATEGY_DEPTH, &b);
-    print_board(board);
-    print_board(b);
+//    printf("(START)\n");
+//    print_board(board);
+//    printf("(THEN)\n");
+//    print_board(b);
+//    printf("(END)\n");
     diff_of_boards(&diff, &board, &b);
     log_move(log, diff.from, diff.to);
 #if DEBUG_MODE

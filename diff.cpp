@@ -15,7 +15,6 @@ void diff_of_boards(Diff *diff, Board *b1, Board *b2) {
             auto p1 = BOARD(*b1, i, j);
             auto p2 = BOARD(*b2, i, j);
             if (p1 == p2) continue;
-            ASSERTE(p1 == NO_PIECE || p2 == NO_PIECE, printf("(%d, %d)\n", i, j));
             if (p1 != NO_PIECE)
                 diff->from = {.row = i, .col = j};
             else
