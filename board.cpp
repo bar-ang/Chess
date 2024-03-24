@@ -24,29 +24,40 @@ Board init_empty_board() {
 Board init_board() {
     Board board = init_empty_board();
     int i = 0;
-    
-    board = set_piece(board, i++, PIECE_ROOK, PLAYER_WHITE, 0, 0);
-    board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_WHITE, 0, 1);
-    board = set_piece(board, i++, PIECE_BISHOP, PLAYER_WHITE, 0, 2);
-    board = set_piece(board, i++, PIECE_QUEEN, PLAYER_WHITE, 0, 3);
+
+#if SET_KINGS || !DEBUG_MODE
     board = set_piece(board, i++, PIECE_KING, PLAYER_WHITE, 0, 4);
-    board = set_piece(board, i++, PIECE_BISHOP, PLAYER_WHITE, 0, 5);
-    board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_WHITE, 0, 6);
-    board = set_piece(board, i++, PIECE_ROOK, PLAYER_WHITE, 0, 7);
-
-    board = set_piece(board, i++, PIECE_ROOK, PLAYER_BLACK, 7, 0);
-    board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_BLACK, 7, 1);
-    board = set_piece(board, i++, PIECE_BISHOP, PLAYER_BLACK, 7, 2);
-    board = set_piece(board, i++, PIECE_QUEEN, PLAYER_BLACK, 7, 3);
     board = set_piece(board, i++, PIECE_KING, PLAYER_BLACK, 7, 4);
+#endif
+#if SET_QUEENS || !DEBUG_MODE
+    board = set_piece(board, i++, PIECE_QUEEN, PLAYER_WHITE, 0, 3);
+    board = set_piece(board, i++, PIECE_QUEEN, PLAYER_BLACK, 7, 3);
+#endif
+#if SET_BISHOPS || !DEBUG_MODE
+    board = set_piece(board, i++, PIECE_BISHOP, PLAYER_WHITE, 0, 2);
+    board = set_piece(board, i++, PIECE_BISHOP, PLAYER_WHITE, 0, 5);
+    board = set_piece(board, i++, PIECE_BISHOP, PLAYER_BLACK, 7, 2);
     board = set_piece(board, i++, PIECE_BISHOP, PLAYER_BLACK, 7, 5);
+#endif
+#if SET_KNIGHTS || !DEBUG_MODE
+    board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_WHITE, 0, 1);
+    board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_WHITE, 0, 6);
+    board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_BLACK, 7, 1);
     board = set_piece(board, i++, PIECE_KNIGHT, PLAYER_BLACK, 7, 6);
+#endif
+#if SET_ROOKS || !DEBUG_MODE
+    board = set_piece(board, i++, PIECE_ROOK, PLAYER_WHITE, 0, 0);
+    board = set_piece(board, i++, PIECE_ROOK, PLAYER_WHITE, 0, 7);
+    board = set_piece(board, i++, PIECE_ROOK, PLAYER_BLACK, 7, 0);
     board = set_piece(board, i++, PIECE_ROOK, PLAYER_BLACK, 7, 7);
+#endif
 
+#if SET_PAWNS || !DEBUG_MODE
     for (int j = 0; j < 8; j++) {
         board = set_piece(board, i++, PIECE_PAWN, PLAYER_WHITE, 1, j);
         board = set_piece(board, i++, PIECE_PAWN, PLAYER_BLACK, 6, j);
     }
+#endif
     
     return board;
 }

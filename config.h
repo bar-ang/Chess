@@ -18,3 +18,10 @@
 
 #define FAIL ASSERT(false)
 #define FAILE(e) ASSERT(false, e)
+
+#define SET_PAWNS   false
+#define SET_QUEENS  false
+#define SET_BISHOPS false
+#define SET_KNIGHTS false
+#define SET_ROOKS   false
+#define SET_KINGS   true
