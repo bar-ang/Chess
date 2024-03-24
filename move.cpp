@@ -5,7 +5,7 @@
 
 #define PIECE_SELECTED(select) (BOARD2(*((select)->board), (select)->pos) != NO_PIECE)
 
-Selection select_tile_ignore_check(Board *board, int row, int col);
+Selection select_tile_ignore_check(Board *, int, int);
 
 int num_possible_moves(Selection *select) {
     int c = 0;
