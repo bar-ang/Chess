@@ -456,6 +456,10 @@ int adjacent_boards(Board *board, Player player, int i, int j, Board *adj_boards
     select = select_tile(board, i, j);
     for (int p = 0; p < select.possible_moves_len; p++) {
         if (select.possible_moves[p].row >= 0 && select.possible_moves[p].col >= 0) {
+#if DEBUG_MODE //DELETE!
+            auto pq = BOARD2(*board,select.possible_moves[p]);
+            ASSERT(pq == NO_PIECE || board->pieces[pq].type != PIECE_KING);
+#endif
             adj_boards[num_adj_boards++] = move_selected_piece(&select, select.possible_moves[p].row, select.possible_moves[p].col, NULL);
         }
     }
