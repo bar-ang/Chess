@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "board.h"
 
+#define SELECTED_PIECE(sel) ((sel)->board->pieces[BOARD2(*((sel)->board), (sel)->pos)])
+
 typedef struct selection_t {
     Board *board;
     Tile pos;
