@@ -1,4 +1,5 @@
 #define DEBUG_MODE 1
+#define DISABLE_CASTELING_FOR_DEBUG 1
 #define _DEBUG "DEBUG: "
 
 #if DEBUG_MODE

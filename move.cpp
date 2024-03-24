@@ -272,6 +272,7 @@ Selection select_tile_ignore_check(Board *board, int row, int col) {
                     select_update(&sel, board, c, piece);
                 }
 
+#if !DEBUG_MODE || !DISABLE_CASTELING_FOR_DEBUG
             // Casteling
             if (board->num_times_piece_has_moved[pid] == 0) {
                 ASSERT((piece.player == PLAYER_WHITE && row == 0) || (piece.player == PLAYER_BLACK && row == NUM_COLS - 1))
@@ -291,7 +292,8 @@ second_rook:
                     select_update(&sel, board, {.row = row, .col = col + 2}, piece);
                 }
             }
-end:            
+end:
+#endif
             break;
         }
         case PIECE_KNIGHT: {
